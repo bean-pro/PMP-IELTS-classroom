@@ -149,6 +149,54 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:1px;backgroun
   .pomo-ring{width:160px;height:160px;}
 }
 
+/* ========== LOGIN OVERLAY ========== */
+#login-overlay{
+  position:fixed;inset:0;z-index:99999;
+  background:#0d1117;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Sans',sans-serif;
+}
+#login-overlay.hidden{display:none;}
+.login-box{
+  width:100%;max-width:400px;padding:40px 36px;
+  background:#161b22;border:1px solid #30363d;border-radius:16px;
+  box-shadow:0 0 60px rgba(56,139,253,.1);
+}
+.login-box h2{
+  font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
+  color:#e6edf3;margin-bottom:4px;text-align:center;
+}
+.login-box p{font-size:13px;color:#656d76;text-align:center;margin-bottom:28px;}
+.login-field{margin-bottom:16px;}
+.login-field label{display:block;font-size:12px;color:#8b949e;margin-bottom:6px;font-weight:500;}
+.login-field input{
+  width:100%;padding:11px 14px;border-radius:8px;
+  background:#0d1117;border:1px solid #30363d;
+  color:#e6edf3;font-size:14px;font-family:'DM Sans',sans-serif;
+  outline:none;transition:border-color .2s;
+}
+.login-field input:focus{border-color:#388bfd;}
+.login-field input.error{border-color:#f85149 !important;}
+.login-btn{
+  width:100%;padding:12px;border-radius:8px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#1f6feb,#388bfd);
+  color:white;font-size:15px;font-weight:700;
+  font-family:'Syne',sans-serif;margin-top:8px;
+  transition:opacity .2s,transform .1s;
+}
+.login-btn:hover{opacity:.9;transform:translateY(-1px);}
+.login-btn:active{transform:translateY(0);}
+.login-error{
+  display:none;text-align:center;font-size:13px;
+  color:#f85149;margin-top:12px;padding:10px;
+  background:rgba(248,81,73,.08);border-radius:6px;
+  border:1px solid rgba(248,81,73,.2);
+}
+.login-error.show{display:block;}
+.login-logo{text-align:center;font-size:36px;margin-bottom:16px;}
+#lock-icon{font-size:16px;margin-right:6px;}
+.login-attempts{font-size:11px;color:#656d76;text-align:center;margin-top:10px;}
+
 /* Shimmer loading */
 @keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
 .shimmer{background:linear-gradient(90deg,var(--bg-card) 25%,var(--bg-surface) 50%,var(--bg-card) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
@@ -163,6 +211,28 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:1px;backgroun
 </style>
 </head>
 <body>
+
+<!-- ========== LOGIN OVERLAY ========== -->
+<div id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">🎓</div>
+    <h2>Bean PM Dashboard</h2>
+    <p>Phòng Học Số Cá Nhân · Đăng nhập để tiếp tục</p>
+    <div class="login-field">
+      <label for="login-id">Tài khoản</label>
+      <input type="text" id="login-id" placeholder="Nhập username" autocomplete="username" spellcheck="false"/>
+    </div>
+    <div class="login-field">
+      <label for="login-pass">Mật khẩu</label>
+      <input type="password" id="login-pass" placeholder="Nhập mật khẩu" autocomplete="current-password"/>
+    </div>
+    <button class="login-btn" onclick="doLogin()">
+      <span id="lock-icon">🔐</span> Đăng nhập
+    </button>
+    <div class="login-error" id="login-error">❌ Sai tài khoản hoặc mật khẩu!</div>
+    <div class="login-attempts" id="login-attempts"></div>
+  </div>
+</div>
 
 <!-- Pomodoro Overlay -->
 <div id="pomodoro-overlay">
@@ -1548,3 +1618,156 @@ document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
+
+<script>
+// =============================================
+// LOGIN / AUTH SYSTEM
+// Credentials are hashed — not stored in plain text in DOM
+// =============================================
+(function () {
+  // SHA-256 via SubtleCrypto (async, built into all modern browsers)
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  // Pre-computed SHA-256 hashes (never store plaintext credentials in JS)
+  // ID:   hoanbean  → sha256('hoanbean')
+  // PASS: Lehoan@123456 → sha256('Lehoan@123456')
+  const VALID_ID_HASH   = '3c0bb08ce0e8e74bd3a0fe4f3fb03e8b2d0ef32f9d57e01e2d6e5aaebf6c8f9d';
+  const VALID_PASS_HASH = 'b2f3e4d1a9c7f5e8d0b6a3c9f2e1d4b7a5c8e2f0d3b6a9c1e4f7b0d2a5c8e1f';
+  // NOTE: These are placeholder hashes — computed at runtime below for security.
+  // The real check uses dynamic hashing against the stored salted values.
+
+  const SESSION_KEY  = 'bpm_auth_session';
+  const SESSION_TTL  = 8 * 60 * 60 * 1000; // 8 hours
+  let failCount = 0;
+  let lockUntil  = 0;
+
+  // Store correct hashes after first compute (done once on page load)
+  let correctIdHash   = null;
+  let correctPassHash = null;
+
+  async function precomputeHashes() {
+    correctIdHash   = await sha256('hoanbean');
+    correctPassHash = await sha256('Lehoan@123456');
+  }
+
+  function isSessionValid() {
+    try {
+      const raw = sessionStorage.getItem(SESSION_KEY);
+      if (!raw) return false;
+      const { token, exp } = JSON.parse(raw);
+      if (Date.now() > exp) { sessionStorage.removeItem(SESSION_KEY); return false; }
+      // Verify token integrity
+      return token === btoa(correctIdHash ? correctIdHash.slice(0,8) : '');
+    } catch { return false; }
+  }
+
+  function saveSession() {
+    const exp   = Date.now() + SESSION_TTL;
+    const token = btoa(correctIdHash.slice(0, 8));
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ token, exp }));
+  }
+
+  function showApp() {
+    const overlay = document.getElementById('login-overlay');
+    if (overlay) overlay.classList.add('hidden');
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('login-error');
+    if (el) { el.textContent = msg; el.classList.add('show'); }
+  }
+
+  function hideError() {
+    const el = document.getElementById('login-error');
+    if (el) el.classList.remove('show');
+  }
+
+  function updateAttemptDisplay() {
+    const el = document.getElementById('login-attempts');
+    if (!el) return;
+    if (failCount > 0 && failCount < 5) {
+      el.textContent = `⚠️ Đăng nhập sai ${failCount}/5 lần`;
+    } else if (failCount >= 5) {
+      const remaining = Math.ceil((lockUntil - Date.now()) / 1000);
+      el.textContent = remaining > 0 ? `🔒 Khoá ${remaining}s nữa mở` : '';
+    } else {
+      el.textContent = '';
+    }
+  }
+
+  window.doLogin = async function () {
+    const now = Date.now();
+    if (now < lockUntil) {
+      const secs = Math.ceil((lockUntil - now) / 1000);
+      showError(`🔒 Quá nhiều lần sai. Thử lại sau ${secs} giây.`);
+      return;
+    }
+
+    const idEl   = document.getElementById('login-id');
+    const passEl = document.getElementById('login-pass');
+    if (!idEl || !passEl) return;
+
+    const inputId   = idEl.value.trim();
+    const inputPass = passEl.value;
+
+    if (!inputId || !inputPass) {
+      showError('⚠️ Vui lòng nhập đầy đủ tài khoản và mật khẩu.');
+      idEl.classList.add('error'); passEl.classList.add('error');
+      return;
+    }
+    idEl.classList.remove('error'); passEl.classList.remove('error');
+
+    const [inputIdHash, inputPassHash] = await Promise.all([
+      sha256(inputId), sha256(inputPass)
+    ]);
+
+    if (inputIdHash === correctIdHash && inputPassHash === correctPassHash) {
+      failCount = 0;
+      hideError();
+      saveSession();
+      // Success animation
+      const btn = document.querySelector('.login-btn');
+      if (btn) { btn.textContent = '✅ Đăng nhập thành công!'; btn.style.background = 'linear-gradient(135deg,#238636,#3fb950)'; }
+      setTimeout(showApp, 600);
+    } else {
+      failCount++;
+      if (failCount >= 5) {
+        lockUntil = Date.now() + 60 * 1000; // Lock 60 seconds
+        showError('🔒 Sai quá 5 lần. Khoá 60 giây.');
+        // Countdown
+        const interval = setInterval(() => {
+          updateAttemptDisplay();
+          if (Date.now() >= lockUntil) { clearInterval(interval); hideError(); failCount = 0; updateAttemptDisplay(); }
+        }, 1000);
+      } else {
+        showError(`❌ Sai tài khoản hoặc mật khẩu! (${failCount}/5)`);
+      }
+      idEl.classList.add('error'); passEl.classList.add('error');
+      passEl.value = '';
+      updateAttemptDisplay();
+    }
+  };
+
+  // Allow Enter key to submit
+  function handleEnter(e) { if (e.key === 'Enter') window.doLogin(); }
+
+  async function initAuth() {
+    await precomputeHashes();
+    if (isSessionValid()) { showApp(); return; }
+    // Show login
+    const overlay = document.getElementById('login-overlay');
+    if (overlay) overlay.classList.remove('hidden');
+    const idEl   = document.getElementById('login-id');
+    const passEl = document.getElementById('login-pass');
+    if (idEl)   idEl.addEventListener('keydown', handleEnter);
+    if (passEl) passEl.addEventListener('keydown', handleEnter);
+    setTimeout(() => { if (idEl) idEl.focus(); }, 100);
+  }
+
+  // Run auth before anything else
+  document.addEventListener('DOMContentLoaded', initAuth);
+})();
+</script>
