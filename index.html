@@ -1,1183 +1,1550 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="dark">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Bean's Personal Digital Classroom 📚</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🎓 Phòng Học Số Cá Nhân | Bean PM Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --bg-primary: #0d1117;
-  --bg-secondary: #161b22;
-  --bg-card: #1c2333;
-  --bg-card-hover: #212a3a;
+  --bg-main: #0d1117;
+  --bg-card: #161b22;
+  --bg-card-hover: #1c2330;
+  --bg-surface: #21262d;
   --border: #30363d;
-  --border-soft: #21262d;
-  --accent-blue: #58a6ff;
-  --accent-blue-dim: #1f6feb;
-  --accent-cyan: #39c5cf;
-  --accent-cyan-dim: #1a7b82;
-  --accent-green: #3fb950;
-  --accent-amber: #d29922;
-  --accent-red: #f85149;
-  --accent-red-dim: #8b1a1a;
-  --accent-purple: #a371f7;
+  --border-accent: #3d444d;
   --text-primary: #e6edf3;
   --text-secondary: #8b949e;
-  --text-muted: #484f58;
-  --pomodoro-work: #58a6ff;
-  --pomodoro-break: #3fb950;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 22px;
-  --font-main: 'Sora', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-  --font-serif: 'Crimson Pro', serif;
-  --shadow-card: 0 2px 16px rgba(0,0,0,0.35);
-  --shadow-glow: 0 0 0 1px rgba(88,166,255,0.15), 0 4px 24px rgba(88,166,255,0.08);
+  --text-muted: #656d76;
+  --blue-accent: #388bfd;
+  --blue-soft: #1f6feb;
+  --teal-accent: #2ea8a0;
+  --green-accent: #3fb950;
+  --amber-accent: #d29922;
+  --red-accent: #f85149;
+  --purple-accent: #a371f7;
+  --pink-accent: #db61a2;
+  --glow-blue: rgba(56,139,253,0.15);
+  --glow-teal: rgba(46,168,160,0.12);
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg-primary);color:var(--text-primary);font-family:var(--font-main);font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden}
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:var(--bg-primary)}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-a{color:var(--accent-blue);text-decoration:none}
-a:hover{text-decoration:underline}
-button{font-family:var(--font-main);cursor:pointer;border:none;outline:none}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg-main);color:var(--text-primary);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--blue-accent),var(--teal-accent),transparent);z-index:100;}
 
-/* ── HEADER ── */
-.header{background:var(--bg-secondary);border-bottom:1px solid var(--border-soft);padding:0 24px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
-.header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:16px;height:60px}
-.logo{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;color:var(--text-primary)}
-.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-blue-dim),var(--accent-cyan-dim));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.header-date{font-size:12px;color:var(--text-secondary);font-family:var(--font-mono);margin-left:auto;display:flex;align-items:center;gap:8px}
-.header-date .live-dot{width:7px;height:7px;background:var(--accent-green);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+/* Typography */
+.font-syne{font-family:'Syne',sans-serif;}
+.font-mono{font-family:'JetBrains Mono',monospace;}
 
-/* ── AI ASSISTANT BANNER ── */
-.ai-banner{background:linear-gradient(135deg,rgba(163,113,247,.12),rgba(88,166,255,.08));border:1px solid rgba(163,113,247,.3);border-radius:var(--radius-lg);margin:20px auto;max-width:1400px;padding:14px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s}
-.ai-banner:hover{background:linear-gradient(135deg,rgba(163,113,247,.18),rgba(88,166,255,.13));border-color:rgba(163,113,247,.5)}
-.ai-banner-icon{width:38px;height:38px;background:rgba(163,113,247,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.ai-banner-text{flex:1}
-.ai-banner-text strong{color:var(--accent-purple);font-size:13px;display:block}
-.ai-banner-text span{color:var(--text-secondary);font-size:12px}
-.ai-banner-btn{background:var(--accent-purple);color:#fff;padding:7px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;white-space:nowrap;transition:opacity .2s}
-.ai-banner-btn:hover{opacity:.85}
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--bg-main);}
+::-webkit-scrollbar-thumb{background:var(--border-accent);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--blue-accent);}
 
-/* ── LAYOUT ── */
-.main{max-width:1400px;margin:0 auto;padding:0 24px 60px}
-.section-title{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.section-title::after{content:'';flex:1;height:1px;background:var(--border-soft)}
+/* Header glow */
+.header-glow{position:relative;}
+.header-glow::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border-accent),transparent);}
 
-/* ── DASHBOARD ROW ── */
-.dashboard{display:grid;grid-template-columns:1fr 1fr 1fr 320px;gap:16px;margin-bottom:28px}
-.dash-card{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:var(--radius-lg);padding:18px 20px}
-.dash-card .label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
-.dash-card .value{font-size:24px;font-weight:700;color:var(--text-primary);font-family:var(--font-mono)}
-.dash-card .subtext{font-size:12px;color:var(--text-secondary);margin-top:4px}
-.progress-bar-wrap{margin-top:10px}
-.progress-bar-wrap .pb-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text-secondary);margin-bottom:5px}
-.progress-bar-bg{background:var(--border);border-radius:4px;height:6px;overflow:hidden}
-.progress-bar-fill{height:6px;border-radius:4px;background:linear-gradient(90deg,var(--accent-blue-dim),var(--accent-cyan));transition:width .8s ease}
-.quote-card{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:var(--radius-lg);padding:18px 20px;display:flex;flex-direction:column;justify-content:center}
-.quote-text{font-family:var(--font-serif);font-size:16px;color:var(--text-primary);font-style:italic;line-height:1.5;margin-bottom:8px}
-.quote-author{font-size:11px;color:var(--text-muted);text-align:right}
+/* Card base */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;transition:all .2s ease;}
+.card:hover{border-color:var(--border-accent);background:var(--bg-card-hover);}
+.card-glow-blue{box-shadow:0 0 20px var(--glow-blue);}
+.card-glow-teal{box-shadow:0 0 20px var(--glow-teal);}
 
-/* ── WEEK NAVIGATOR ── */
-.week-nav{display:flex;align-items:center;gap:10px;margin-bottom:22px;flex-wrap:wrap}
-.week-nav .week-label{font-size:13px;font-weight:600;color:var(--text-primary);min-width:140px}
-.week-tabs{display:flex;gap:6px;flex-wrap:wrap;flex:1}
-.week-tab{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:var(--radius-sm);padding:6px 14px;font-size:12px;color:var(--text-secondary);cursor:pointer;transition:all .2s;position:relative}
-.week-tab:hover{border-color:var(--accent-blue-dim);color:var(--accent-blue)}
-.week-tab.active{background:var(--accent-blue-dim);border-color:var(--accent-blue);color:#fff;font-weight:600}
-.week-tab.today-tab::after{content:'TODAY';position:absolute;top:-8px;right:-4px;background:var(--accent-green);color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px}
-.week-tab.holiday-tab{border-color:var(--accent-amber);color:var(--accent-amber)}
-.week-tab.holiday-tab.active{background:rgba(210,153,34,.2)}
-.week-tab.class-tab::before{content:'📡';position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:10px}
+/* Lesson cards */
+.lesson-card{position:relative;overflow:hidden;}
+.lesson-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;}
+.lesson-card.english::before{background:linear-gradient(180deg,var(--blue-accent),var(--teal-accent));}
+.lesson-card.pmp::before{background:linear-gradient(180deg,var(--purple-accent),var(--pink-accent));}
+.lesson-card.vocab::before{background:linear-gradient(180deg,var(--green-accent),var(--teal-accent));}
+.lesson-card.music::before{background:linear-gradient(180deg,var(--amber-accent),var(--pink-accent));}
+.lesson-card.passive::before{background:linear-gradient(180deg,var(--text-muted),var(--border-accent));}
+.lesson-card.live-class::before{background:linear-gradient(180deg,#ff6b6b,#ee5a24);width:4px;}
 
-/* ── DAY VIEW ── */
-.day-header{background:var(--bg-secondary);border:1px solid var(--border-soft);border-radius:var(--radius-lg);padding:16px 22px;margin-bottom:18px;display:flex;align-items:center;gap:16px}
-.day-header .day-title{font-size:18px;font-weight:700;color:var(--text-primary)}
-.day-header .day-sub{font-size:12px;color:var(--text-secondary);margin-top:2px}
-.day-badge{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
-.badge-normal{background:rgba(88,166,255,.15);color:var(--accent-blue)}
-.badge-class{background:rgba(163,113,247,.15);color:var(--accent-purple)}
-.badge-holiday{background:rgba(210,153,34,.15);color:var(--accent-amber)}
-.day-progress-mini{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:12px;color:var(--text-secondary)}
+/* Status badges */
+.badge-todo{background:rgba(139,148,158,0.12);color:var(--text-secondary);border:1px solid var(--border);}
+.badge-done{background:rgba(63,185,80,0.12);color:var(--green-accent);border:1px solid rgba(63,185,80,0.3);}
+.badge-missed{background:rgba(248,81,73,0.12);color:var(--red-accent);border:1px solid rgba(248,81,73,0.3);}
 
-/* ── LESSON CARD ── */
-.lessons-grid{display:flex;flex-direction:column;gap:14px}
-.lesson-card{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:var(--radius-lg);overflow:hidden;transition:all .25s;box-shadow:var(--shadow-card)}
-.lesson-card:hover{box-shadow:var(--shadow-glow);border-color:var(--border)}
-.lesson-card.status-missed{border-color:var(--accent-red)!important;background:rgba(248,81,73,.05)!important;box-shadow:0 0 0 1px rgba(248,81,73,.3),0 4px 20px rgba(248,81,73,.15)!important}
-.lesson-card.status-done{border-color:rgba(63,185,80,.4)}
-.lesson-card-header{padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
-.lesson-type-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.dot-english{background:var(--accent-cyan)}
-.dot-pmp{background:var(--accent-blue)}
-.dot-passive{background:var(--accent-amber)}
-.dot-class{background:var(--accent-purple)}
-.dot-free{background:var(--accent-green)}
-.lesson-time{font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);min-width:100px}
-.lesson-title{font-size:14px;font-weight:600;color:var(--text-primary);flex:1}
-.lesson-title .lesson-subtitle{font-size:11px;color:var(--text-secondary);font-weight:400;display:block;margin-top:2px}
-.lesson-status-sel{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px 10px;font-size:11px;color:var(--text-secondary);cursor:pointer;font-family:var(--font-main);min-width:110px}
-.lesson-status-sel.done{color:var(--accent-green);border-color:rgba(63,185,80,.4)}
-.lesson-status-sel.missed{color:var(--accent-red);border-color:rgba(248,81,73,.4)}
-.lesson-toggle-btn{background:transparent;color:var(--text-muted);font-size:18px;padding:0 4px;transition:transform .25s}
-.lesson-toggle-btn.open{transform:rotate(180deg)}
-.lesson-card-body{border-top:1px solid var(--border-soft);padding:16px 18px;display:none;flex-direction:column;gap:12px}
-.lesson-card-body.open{display:flex}
-.lesson-meta-row{display:flex;gap:20px;flex-wrap:wrap}
-.meta-item{display:flex;flex-direction:column;gap:3px}
-.meta-item .meta-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
-.meta-item .meta-val{font-size:12px;color:var(--text-secondary)}
-.lesson-instruction{background:var(--bg-secondary);border-radius:var(--radius-md);padding:12px 14px;font-size:13px;color:var(--text-primary);line-height:1.7;border-left:3px solid var(--accent-blue)}
-.lesson-instruction.english-inst{border-left-color:var(--accent-cyan)}
-.lesson-instruction.passive-inst{border-left-color:var(--accent-amber)}
-.lesson-instruction.class-inst{border-left-color:var(--accent-purple)}
-.lesson-instruction.free-inst{border-left-color:var(--accent-green)}
-.resource-links{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.resource-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-right:4px}
-.res-link{background:rgba(88,166,255,.1);color:var(--accent-blue);border:1px solid rgba(88,166,255,.25);border-radius:var(--radius-sm);padding:4px 10px;font-size:11px;font-weight:500;transition:all .2s;display:inline-flex;align-items:center;gap:4px}
-.res-link:hover{background:rgba(88,166,255,.2);text-decoration:none}
-.res-link.cyan{background:rgba(57,197,207,.1);color:var(--accent-cyan);border-color:rgba(57,197,207,.25)}
-.res-link.amber{background:rgba(210,153,34,.1);color:var(--accent-amber);border-color:rgba(210,153,34,.25)}
-.res-link.purple{background:rgba(163,113,247,.1);color:var(--accent-purple);border-color:rgba(163,113,247,.25)}
-.res-link.green{background:rgba(63,185,80,.1);color:var(--accent-green);border-color:rgba(63,185,80,.25)}
-.card-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.btn-pomodoro{background:var(--accent-blue-dim);color:#fff;border-radius:var(--radius-sm);padding:8px 16px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;transition:all .2s}
-.btn-pomodoro:hover{background:var(--accent-blue);transform:translateY(-1px)}
-.btn-gcal{background:rgba(63,185,80,.12);color:var(--accent-green);border:1px solid rgba(63,185,80,.3);border-radius:var(--radius-sm);padding:8px 14px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:all .2s}
-.btn-gcal:hover{background:rgba(63,185,80,.2);text-decoration:none}
-.note-section{display:flex;flex-direction:column;gap:6px}
-.note-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px}
-.note-textarea{width:100%;background:var(--bg-secondary);border:1px solid var(--border-soft);border-radius:var(--radius-md);padding:10px 12px;font-size:12px;color:var(--text-primary);font-family:var(--font-main);resize:vertical;min-height:70px;transition:border-color .2s;line-height:1.6}
-.note-textarea:focus{outline:none;border-color:var(--accent-blue-dim)}
-.note-save-btn{align-self:flex-end;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:5px 14px;font-size:11px;color:var(--text-secondary);cursor:pointer;transition:all .2s}
-.note-save-btn:hover{border-color:var(--accent-green);color:var(--accent-green)}
-.note-save-btn.saved{color:var(--accent-green);border-color:rgba(63,185,80,.4)}
+/* Missed card state */
+.missed-card{border:2px solid var(--red-accent)!important;background:rgba(248,81,73,0.05)!important;animation:redPulse 2s ease-in-out infinite;}
+@keyframes redPulse{0%,100%{box-shadow:0 0 0 0 rgba(248,81,73,0);}50%{box-shadow:0 0 12px 3px rgba(248,81,73,0.2);}}
 
-/* ── MAKEUP QUEUE ── */
-.makeup-queue{background:rgba(248,81,73,.06);border:1px solid rgba(248,81,73,.35);border-radius:var(--radius-lg);padding:20px;margin-top:28px;display:none}
-.makeup-queue.has-items{display:block}
-.makeup-queue-title{font-size:13px;font-weight:700;color:var(--accent-red);display:flex;align-items:center;gap:8px;margin-bottom:14px}
-.makeup-item{background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.2);border-radius:var(--radius-md);padding:10px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:12px}
-.makeup-item .makeup-day{font-weight:700;color:var(--accent-red);min-width:60px;font-family:var(--font-mono)}
-.makeup-item .makeup-lesson{color:var(--text-primary);flex:1}
-.makeup-item .makeup-clear-btn{background:transparent;color:var(--text-muted);font-size:13px;cursor:pointer;padding:2px 6px;border-radius:4px;transition:all .2s}
-.makeup-item .makeup-clear-btn:hover{color:var(--accent-red);background:rgba(248,81,73,.15)}
+/* Completed card */
+.completed-card{opacity:0.65;border-color:rgba(63,185,80,0.25)!important;}
+.completed-card::after{content:'✓';position:absolute;top:12px;right:12px;width:24px;height:24px;background:var(--green-accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#000;font-weight:700;}
 
-/* ── POMODORO MODAL ── */
-.pomo-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center}
-.pomo-overlay.open{display:flex}
-.pomo-modal{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-xl);padding:32px 40px;width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.pomo-modal-title{font-size:14px;color:var(--text-secondary);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:1px}
-.pomo-lesson-name{font-size:16px;color:var(--text-primary);font-weight:700;margin-bottom:24px;line-height:1.4}
-.pomo-clock{font-family:var(--font-mono);font-size:64px;font-weight:300;color:var(--text-primary);margin:0 0 8px;letter-spacing:-2px;line-height:1}
-.pomo-phase{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:20px}
-.pomo-phase.work{color:var(--pomodoro-work)}
-.pomo-phase.break{color:var(--pomodoro-break)}
-.pomo-circle-wrap{position:relative;width:180px;height:180px;margin:0 auto 24px}
-.pomo-circle-bg{fill:none;stroke:var(--border);stroke-width:6}
-.pomo-circle-prog{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .5s linear;transform:rotate(-90deg);transform-origin:center}
-.pomo-circle-prog.work{stroke:var(--pomodoro-work)}
-.pomo-circle-prog.break{stroke:var(--pomodoro-break)}
-.pomo-count{font-size:12px;color:var(--text-secondary);margin-bottom:20px}
-.pomo-count span{color:var(--accent-blue);font-weight:700}
-.pomo-controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.pomo-btn{border-radius:var(--radius-md);padding:10px 22px;font-size:13px;font-weight:600;transition:all .2s;color:#fff}
-.pomo-btn.start{background:var(--accent-blue-dim)}
-.pomo-btn.start:hover{background:var(--accent-blue)}
-.pomo-btn.reset{background:rgba(255,255,255,.07);color:var(--text-secondary)}
-.pomo-btn.reset:hover{background:rgba(255,255,255,.12)}
-.pomo-btn.close-btn{background:rgba(248,81,73,.15);color:var(--accent-red)}
-.pomo-btn.close-btn:hover{background:rgba(248,81,73,.25)}
+/* Progress bar */
+.progress-track{background:var(--bg-surface);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue-accent),var(--teal-accent));transition:width .6s cubic-bezier(.4,0,.2,1);}
 
-/* ── PROGRESS BAR GLOBAL ── */
-.overall-progress{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:var(--radius-lg);padding:18px 22px;margin-bottom:22px}
-.prog-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
-.prog-title{font-size:13px;font-weight:600;color:var(--text-primary)}
-.prog-pct{font-family:var(--font-mono);font-size:18px;font-weight:700;color:var(--accent-blue)}
-.prog-multibar{display:flex;height:8px;border-radius:4px;overflow:hidden;gap:1px}
-.prog-seg{height:100%;transition:width .6s ease}
-.prog-seg.done{background:var(--accent-green)}
-.prog-seg.missed{background:var(--accent-red)}
-.prog-seg.todo{background:var(--border)}
-.prog-legend{display:flex;gap:16px;margin-top:8px}
-.prog-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-secondary)}
-.prog-legend-dot{width:8px;height:8px;border-radius:50%}
+/* Pomodoro Timer */
+#pomodoro-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:999;display:none;align-items:center;justify-content:center;}
+#pomodoro-overlay.active{display:flex;}
+.pomo-ring{position:relative;width:200px;height:200px;}
+.pomo-ring svg{transform:rotate(-90deg);}
+.pomo-ring .ring-bg{stroke:var(--bg-surface);}
+.pomo-ring .ring-fill{stroke:var(--blue-accent);stroke-linecap:round;transition:stroke-dashoffset .9s linear;}
+.pomo-time{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 
-/* ── MOBILE ── */
-@media(max-width:900px){
-  .dashboard{grid-template-columns:1fr 1fr}
-  .quote-card{grid-column:1/-1}
-  .main{padding:0 14px 40px}
-}
-@media(max-width:600px){
-  .dashboard{grid-template-columns:1fr}
-  .lesson-card-header{flex-wrap:wrap}
-  .lesson-time{min-width:80px}
+/* Flashcard */
+.flashcard{perspective:1000px;cursor:pointer;}
+.flashcard-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);}
+.flashcard.flipped .flashcard-inner{transform:rotateY(180deg);}
+.flashcard-front,.flashcard-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;}
+.flashcard-front{background:linear-gradient(135deg,var(--bg-surface),var(--bg-card-hover));border:1px solid var(--border-accent);}
+.flashcard-back{background:linear-gradient(135deg,rgba(56,139,253,.1),rgba(46,168,160,.1));border:1px solid var(--blue-accent);transform:rotateY(180deg);}
+
+/* Day nav */
+.day-btn{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;transition:all .2s;}
+.day-btn:hover{border-color:var(--blue-accent);color:var(--text-primary);}
+.day-btn.active{background:var(--blue-soft);border-color:var(--blue-accent);color:white;}
+.day-btn.today{border-color:var(--teal-accent)!important;color:var(--teal-accent)!important;}
+.day-btn.today.active{background:var(--teal-accent);color:#000!important;}
+.day-btn.holiday{border-color:var(--amber-accent)!important;color:var(--amber-accent)!important;}
+.day-btn.holiday.active{background:rgba(210,153,34,.2);}
+.day-btn.weekend{border-color:var(--purple-accent)!important;color:var(--purple-accent)!important;}
+.day-btn.weekend.active{background:rgba(163,113,247,.15);}
+
+/* AI Portal */
+.ai-btn{background:linear-gradient(135deg,#667eea,#764ba2);border:none;border-radius:10px;padding:12px 20px;color:white;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;}
+.ai-btn:hover{transform:translateY(-1px);box-shadow:0 8px 25px rgba(102,126,234,.35);}
+
+/* Quote */
+.quote-border{border-left:3px solid var(--blue-accent);padding-left:16px;}
+
+/* Textarea vocab */
+.vocab-textarea{background:var(--bg-main);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);padding:10px;resize:vertical;font-family:'DM Sans',sans-serif;font-size:13px;width:100%;min-height:80px;transition:border-color .2s;}
+.vocab-textarea:focus{outline:none;border-color:var(--blue-accent);}
+.vocab-textarea::placeholder{color:var(--text-muted);}
+
+/* Week selector */
+.week-nav-btn{background:var(--bg-surface);border:1px solid var(--border);color:var(--text-secondary);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;transition:all .2s;}
+.week-nav-btn:hover{border-color:var(--blue-accent);color:var(--text-primary);}
+
+/* Tabs */
+.tab-btn{padding:8px 18px;border-radius:8px;border:none;background:transparent;color:var(--text-secondary);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;transition:all .2s;}
+.tab-btn.active{background:var(--bg-surface);color:var(--text-primary);border:1px solid var(--border-accent);}
+
+/* Toast */
+#toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;background:var(--bg-surface);border:1px solid var(--border-accent);color:var(--text-primary);font-size:14px;z-index:9999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;}
+#toast.show{opacity:1;transform:translateY(0);}
+#toast.success{border-color:var(--green-accent);color:var(--green-accent);}
+#toast.warning{border-color:var(--red-accent);color:var(--red-accent);}
+
+/* Holiday overlay */
+.holiday-overlay{position:absolute;inset:0;background:rgba(210,153,34,0.06);border-radius:12px;pointer-events:none;z-index:1;}
+
+/* Makeup Queue */
+.makeup-item{border:2px solid rgba(248,81,73,0.4);border-radius:10px;padding:14px;background:rgba(248,81,73,0.04);}
+
+/* Stats */
+.stat-circle{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;}
+
+/* Responsive tweaks */
+@media(max-width:640px){
+  .day-btn{padding:6px 10px;font-size:11px;}
+  .pomo-ring{width:160px;height:160px;}
 }
 
-/* ── TOAST ── */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--bg-card);border:1px solid var(--accent-green);border-radius:var(--radius-md);padding:10px 18px;font-size:13px;color:var(--accent-green);z-index:2000;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none}
-.toast.show{transform:translateY(0);opacity:1}
+/* Shimmer loading */
+@keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
+.shimmer{background:linear-gradient(90deg,var(--bg-card) 25%,var(--bg-surface) 50%,var(--bg-card) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
 
-/* ── WEEK OVERVIEW MINI ── */
-.week-overview-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:22px}
-.wog-cell{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:var(--radius-md);padding:8px 6px;text-align:center;cursor:pointer;transition:all .2s}
-.wog-cell:hover{border-color:var(--accent-blue-dim)}
-.wog-cell.active{border-color:var(--accent-blue);background:rgba(88,166,255,.08)}
-.wog-day-name{font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);margin-bottom:4px}
-.wog-day-num{font-size:14px;font-weight:700;color:var(--text-primary);font-family:var(--font-mono)}
-.wog-day-status{margin-top:5px;height:4px;border-radius:2px;background:var(--border-soft)}
-.wog-day-status.done{background:var(--accent-green)}
-.wog-day-status.missed{background:var(--accent-red)}
-.wog-day-status.today{background:var(--accent-blue);animation:pulse 2s infinite}
-.wog-day-status.class{background:var(--accent-purple)}
-.wog-day-status.holiday{background:var(--accent-amber)}
-
-.missed-warning{background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.3);border-radius:var(--radius-md);padding:8px 14px;font-size:12px;color:var(--accent-red);display:none;margin-top:8px;align-items:center;gap:6px}
-.missed-warning.show{display:flex}
-
-/* tag */
-.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px}
-.tag-pmp{background:rgba(88,166,255,.15);color:var(--accent-blue)}
-.tag-en{background:rgba(57,197,207,.15);color:var(--accent-cyan)}
-.tag-break{background:rgba(63,185,80,.15);color:var(--accent-green)}
-.tag-class{background:rgba(163,113,247,.15);color:var(--accent-purple)}
-.tag-passive{background:rgba(210,153,34,.15);color:var(--accent-amber)}
-
-.holiday-notice{background:rgba(210,153,34,.08);border:1px solid rgba(210,153,34,.3);border-radius:var(--radius-lg);padding:20px 24px;text-align:center}
-.holiday-notice .h-title{font-size:20px;margin-bottom:8px}
-.holiday-notice .h-desc{color:var(--text-secondary);font-size:14px;margin-bottom:14px}
-.holiday-notice .h-tip{background:rgba(210,153,34,.12);border-radius:var(--radius-md);padding:12px 16px;font-size:13px;color:var(--accent-amber);text-align:left;line-height:1.7}
+/* Entrance animation */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{animation:fadeUp .4s ease forwards;}
+.fade-up-delay-1{animation-delay:.05s;opacity:0;}
+.fade-up-delay-2{animation-delay:.1s;opacity:0;}
+.fade-up-delay-3{animation-delay:.15s;opacity:0;}
+.fade-up-delay-4{animation-delay:.2s;opacity:0;}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="header">
-  <div class="header-inner">
-    <div class="logo">
-      <div class="logo-icon">📚</div>
-      <span>Bean's Digital Classroom</span>
+<!-- Pomodoro Overlay -->
+<div id="pomodoro-overlay">
+  <div class="card p-8 max-w-sm w-full mx-4" style="border-color:var(--border-accent);">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="font-syne font-bold text-lg" style="color:var(--text-primary);" id="pomo-lesson-name">Pomodoro</h3>
+      <button onclick="closePomodoro()" class="text-sm px-3 py-1 rounded" style="background:var(--bg-surface);color:var(--text-secondary);">✕ Đóng</button>
     </div>
-    <div style="display:flex;align-items:center;gap:12px;margin-left:auto">
-      <div class="header-date">
-        <div class="live-dot"></div>
-        <span id="liveDateTime"></span>
+    <div class="flex flex-col items-center gap-6">
+      <div class="pomo-ring">
+        <svg width="200" height="200" viewBox="0 0 200 200">
+          <circle class="ring-bg" cx="100" cy="100" r="88" fill="none" stroke-width="10"/>
+          <circle class="ring-fill" id="pomo-ring-fill" cx="100" cy="100" r="88" fill="none" stroke-width="10" stroke-dasharray="553" stroke-dashoffset="0"/>
+        </svg>
+        <div class="pomo-time">
+          <div class="font-mono text-4xl font-bold" style="color:var(--text-primary);" id="pomo-display">25:00</div>
+          <div class="text-xs mt-1" style="color:var(--text-muted);" id="pomo-phase">Học tập</div>
+        </div>
       </div>
-    </div>
-  </div>
-</header>
-
-<!-- MAIN -->
-<main class="main">
-  <!-- AI ASSISTANT BANNER -->
-  <a class="ai-banner" href="https://notebooklm.google.com/notebook/a63cf3d6-4be7-45fe-8e5a-1b8a44cb036c" target="_blank">
-    <div class="ai-banner-icon">🤖</div>
-    <div class="ai-banner-text">
-      <strong>Trợ lý AI PMP Cá nhân của Bean</strong>
-      <span>Khi gặp khái niệm khó trong PMBOK hoặc ECO → Click vào đây để hỏi AI Assistant của bạn trên NotebookLM</span>
-    </div>
-    <div class="ai-banner-btn">Mở AI Assistant →</div>
-  </a>
-
-  <!-- DASHBOARD -->
-  <div class="section-title" style="margin-top:4px">Tổng quan hôm nay</div>
-  <div class="dashboard">
-    <div class="dash-card">
-      <div class="label">Ngày học</div>
-      <div class="value" id="studyDayNum">1</div>
-      <div class="subtext">Kể từ 02/06/2026</div>
-    </div>
-    <div class="dash-card">
-      <div class="label">Tiến độ tuần</div>
-      <div class="value" id="weekProgressVal">0%</div>
-      <div class="progress-bar-wrap">
-        <div class="pb-label"><span>Hoàn thành</span><span id="weekProgressFrac">0/0</span></div>
-        <div class="progress-bar-bg"><div class="progress-bar-fill" id="weekProgressBar" style="width:0%"></div></div>
+      <div class="flex gap-3">
+        <button onclick="togglePomodoro()" id="pomo-toggle-btn" class="px-6 py-2 rounded-lg font-semibold text-sm" style="background:var(--blue-accent);color:white;">▶ Bắt đầu</button>
+        <button onclick="resetPomodoro()" class="px-4 py-2 rounded-lg text-sm" style="background:var(--bg-surface);color:var(--text-secondary);border:1px solid var(--border);">↺ Reset</button>
       </div>
-    </div>
-    <div class="dash-card">
-      <div class="label">Tổng tiết đã học</div>
-      <div class="value" id="totalDone">0</div>
-      <div class="subtext" id="totalSubtext">Tiếp tục cố lên! 💪</div>
-    </div>
-    <div class="quote-card">
-      <div class="quote-text" id="dailyQuote">"Hành trình nghìn dặm bắt đầu từ một bước chân."</div>
-      <div class="quote-author">— Lão Tử</div>
-    </div>
-  </div>
-
-  <!-- OVERALL PROGRESS -->
-  <div class="overall-progress">
-    <div class="prog-header">
-      <div class="prog-title">Tiến độ Tổng thể Lộ trình PMP + IELTS</div>
-      <div class="prog-pct" id="overallPct">0%</div>
-    </div>
-    <div class="prog-multibar" id="progMultibar"></div>
-    <div class="prog-legend">
-      <div class="prog-legend-item"><div class="prog-legend-dot" style="background:var(--accent-green)"></div>Hoàn thành</div>
-      <div class="prog-legend-item"><div class="prog-legend-dot" style="background:var(--accent-red)"></div>Bỏ lỡ</div>
-      <div class="prog-legend-item"><div class="prog-legend-dot" style="background:var(--border)"></div>Chưa học</div>
-    </div>
-  </div>
-
-  <!-- WEEK NAV -->
-  <div class="section-title">Lịch học — 14 tuần PMP + IELTS</div>
-  <div class="week-nav">
-    <span class="week-label" id="weekNavLabel">Tuần 1</span>
-    <div class="week-tabs" id="weekTabsContainer"></div>
-  </div>
-
-  <!-- WEEK OVERVIEW MINI -->
-  <div class="week-overview-grid" id="weekOverviewGrid"></div>
-
-  <!-- DAY VIEW -->
-  <div id="dayView"></div>
-
-  <!-- MAKEUP QUEUE -->
-  <div class="makeup-queue" id="makeupQueue">
-    <div class="makeup-queue-title">⚠️ Lớp học bù — Các buổi bị bỏ lỡ</div>
-    <div id="makeupList"></div>
-  </div>
-</main>
-
-<!-- POMODORO MODAL -->
-<div class="pomo-overlay" id="pomoOverlay">
-  <div class="pomo-modal">
-    <div class="pomo-modal-title">Pomodoro Timer</div>
-    <div class="pomo-lesson-name" id="pomoLessonName">Đang học...</div>
-    <div class="pomo-circle-wrap">
-      <svg width="180" height="180" viewBox="0 0 180 180">
-        <circle class="pomo-circle-bg" cx="90" cy="90" r="80"/>
-        <circle class="pomo-circle-prog work" id="pomoCircle" cx="90" cy="90" r="80" stroke-dasharray="502.65" stroke-dashoffset="0"/>
-      </svg>
-      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
-        <div class="pomo-clock" id="pomoClock">25:00</div>
-        <div class="pomo-phase work" id="pomoPhase">TẬP TRUNG</div>
+      <div class="grid grid-cols-3 gap-2 w-full text-center text-xs" style="color:var(--text-muted);">
+        <button onclick="setPomoDuration(25)" class="py-2 rounded-lg" style="background:var(--bg-surface);border:1px solid var(--border);">25 phút</button>
+        <button onclick="setPomoDuration(45)" class="py-2 rounded-lg" style="background:var(--bg-surface);border:1px solid var(--border);">45 phút</button>
+        <button onclick="setPomoDuration(90)" class="py-2 rounded-lg" style="background:var(--bg-surface);border:1px solid var(--border);">90 phút</button>
       </div>
-    </div>
-    <div class="pomo-count">Phiên thứ <span id="pomoSessionNum">1</span> — <span id="pomoTotal">0</span> phiên hoàn thành</div>
-    <div class="pomo-controls">
-      <button class="pomo-btn start" id="pomoBtnStart" onclick="pomodoroToggle()">▶ Bắt đầu</button>
-      <button class="pomo-btn reset" onclick="pomodoroReset()">↺ Reset</button>
-      <button class="pomo-btn close-btn" onclick="pomodoroClose()">✕ Đóng</button>
+      <div id="pomo-session-count" class="text-xs" style="color:var(--text-muted);">🍅 Phiên hôm nay: 0</div>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- MAIN LAYOUT -->
+<div class="min-h-screen" style="background:var(--bg-main);">
+
+  <!-- HEADER -->
+  <header class="header-glow sticky top-0 z-50 px-4 py-3" style="background:rgba(13,17,23,0.95);backdrop-filter:blur(12px);">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-lg" style="background:linear-gradient(135deg,var(--blue-accent),var(--teal-accent));">🎓</div>
+        <div>
+          <h1 class="font-syne font-bold text-base leading-tight" style="color:var(--text-primary);">Bean PM Dashboard</h1>
+          <p class="text-xs" style="color:var(--text-muted);">Phòng Học Số Cá Nhân</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg" style="background:var(--bg-surface);border:1px solid var(--border);">
+          <span style="color:var(--text-muted);">🗓</span>
+          <span id="header-date" style="color:var(--text-secondary);"></span>
+        </div>
+        <a href="https://notebooklm.google.com/notebook/a63cf3d6-4be7-45fe-8e5a-1b8a44cb036c" target="_blank">
+          <button class="ai-btn text-sm">
+            <span>🤖</span><span class="hidden sm:inline">AI Trợ Lý PMP</span><span class="sm:hidden">AI</span>
+          </button>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO STATS BAR -->
+  <div class="px-4 py-4 fade-up" style="background:var(--bg-card);border-bottom:1px solid var(--border);">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+        <div class="card p-4 text-center">
+          <div class="font-mono text-2xl font-bold mb-1" style="color:var(--blue-accent);" id="stat-day">1</div>
+          <div class="text-xs" style="color:var(--text-muted);">Ngày học</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="font-mono text-2xl font-bold mb-1" style="color:var(--green-accent);" id="stat-done">0</div>
+          <div class="text-xs" style="color:var(--text-muted);">Hoàn thành</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="font-mono text-2xl font-bold mb-1" style="color:var(--red-accent);" id="stat-missed">0</div>
+          <div class="text-xs" style="color:var(--text-muted);">Bỏ lỡ</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="font-mono text-2xl font-bold mb-1" style="color:var(--amber-accent);" id="stat-vocab">0</div>
+          <div class="text-xs" style="color:var(--text-muted);">Từ vựng</div>
+        </div>
+      </div>
+      <!-- Progress bar -->
+      <div class="flex items-center gap-3">
+        <span class="text-xs" style="color:var(--text-muted);">Tiến độ tuần:</span>
+        <div class="flex-1 progress-track h-2">
+          <div class="progress-fill" id="week-progress" style="width:0%"></div>
+        </div>
+        <span class="text-xs font-mono" style="color:var(--text-secondary);" id="week-progress-label">0%</span>
+      </div>
+      <!-- Motivational quote -->
+      <div class="mt-4 quote-border">
+        <p class="text-sm italic" style="color:var(--text-secondary);" id="daily-quote"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+
+    <!-- WEEK NAVIGATION -->
+    <div class="card p-4 fade-up fade-up-delay-1">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <div class="flex items-center gap-2">
+          <button class="week-nav-btn" onclick="navigateWeek(-1)">← Tuần trước</button>
+          <span class="font-syne font-bold text-sm px-3 py-1.5 rounded-lg" style="background:var(--bg-surface);color:var(--text-primary);" id="week-label">Tuần 1</span>
+          <button class="week-nav-btn" onclick="navigateWeek(1)">Tuần sau →</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="goToToday()" class="text-xs px-3 py-1.5 rounded-lg" style="background:rgba(46,168,160,.12);border:1px solid var(--teal-accent);color:var(--teal-accent);">📍 Hôm nay</button>
+          <button onclick="goToDay(0)" class="text-xs px-3 py-1.5 rounded-lg" style="background:rgba(56,139,253,.1);border:1px solid var(--border);color:var(--text-muted);">↩ Ngày đầu</button>
+        </div>
+      </div>
+      <!-- Day buttons -->
+      <div id="day-nav-buttons" class="flex flex-wrap gap-2"></div>
+    </div>
+
+    <!-- TODAY'S OVERVIEW -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-up fade-up-delay-2">
+      <!-- Day Header Card -->
+      <div class="lg:col-span-2 card p-5">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span id="day-emoji" class="text-2xl">📅</span>
+              <h2 class="font-syne font-bold text-xl" style="color:var(--text-primary);" id="day-title">Đang tải...</h2>
+            </div>
+            <p class="text-sm" style="color:var(--text-muted);" id="day-subtitle"></p>
+          </div>
+          <div id="holiday-badge" class="hidden text-xs px-3 py-1.5 rounded-full font-medium" style="background:rgba(210,153,34,.12);border:1px solid var(--amber-accent);color:var(--amber-accent);">🏖️ Ngày nghỉ lễ</div>
+        </div>
+        <!-- Day progress -->
+        <div class="mb-4">
+          <div class="flex justify-between text-xs mb-2" style="color:var(--text-muted);">
+            <span>Tiến độ hôm nay</span>
+            <span id="day-progress-label">0/0 bài</span>
+          </div>
+          <div class="progress-track h-3">
+            <div class="progress-fill" id="day-progress-bar" style="width:0%"></div>
+          </div>
+        </div>
+        <!-- Quick actions -->
+        <div class="flex flex-wrap gap-2">
+          <button onclick="markAllDone()" class="text-xs px-3 py-2 rounded-lg" style="background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.3);color:var(--green-accent);">✓ Đánh dấu tất cả xong</button>
+          <button onclick="showVocabGame()" class="text-xs px-3 py-2 rounded-lg" style="background:rgba(56,139,253,.1);border:1px solid rgba(56,139,253,.3);color:var(--blue-accent);">🃏 Ôn từ vựng hôm qua</button>
+        </div>
+      </div>
+      <!-- PMP Phase Card -->
+      <div class="card p-5">
+        <h3 class="font-syne font-semibold text-sm mb-3 flex items-center gap-2" style="color:var(--text-secondary);">
+          <span>📊</span> Lộ trình PMP
+        </h3>
+        <div id="pmp-phase-display" class="space-y-2"></div>
+        <div class="mt-4 pt-4" style="border-top:1px solid var(--border);">
+          <div class="text-xs mb-2" style="color:var(--text-muted);">PMP Exam Readiness</div>
+          <div class="progress-track h-2 mb-1">
+            <div class="progress-fill" id="pmp-progress-bar" style="width:0%"></div>
+          </div>
+          <div class="text-xs font-mono" style="color:var(--text-muted);" id="pmp-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LESSON CARDS for the day -->
+    <div class="fade-up fade-up-delay-3">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-syne font-bold text-lg" style="color:var(--text-primary);">📚 Lịch học hôm nay</h2>
+        <span class="text-xs" style="color:var(--text-muted);" id="current-date-display"></span>
+      </div>
+      <div id="lesson-cards-container" class="space-y-4">
+        <!-- Cards rendered by JS -->
+      </div>
+    </div>
+
+    <!-- VOCABULARY FLASHCARD SECTION -->
+    <div id="vocab-game-section" class="fade-up fade-up-delay-4 hidden">
+      <div class="card p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-syne font-bold text-lg flex items-center gap-2" style="color:var(--text-primary);">
+            <span>🃏</span> Ôn Từ Vựng (Spaced Repetition)
+          </h2>
+          <button onclick="closeVocabGame()" class="text-sm px-3 py-1.5 rounded-lg" style="background:var(--bg-surface);color:var(--text-secondary);border:1px solid var(--border);">✕ Đóng</button>
+        </div>
+        <!-- Tabs -->
+        <div class="flex gap-2 mb-6">
+          <button class="tab-btn active" id="tab-flashcard" onclick="switchVocabTab('flashcard')">🃏 Flashcard</button>
+          <button class="tab-btn" id="tab-quiz" onclick="switchVocabTab('quiz')">🎯 Mini Quiz</button>
+          <button class="tab-btn" id="tab-all" onclick="switchVocabTab('all')">📋 Tất cả từ</button>
+        </div>
+        <!-- Flashcard Tab -->
+        <div id="vocab-flashcard-tab">
+          <div id="no-vocab-msg" class="text-center py-10 hidden">
+            <div class="text-4xl mb-3">📭</div>
+            <p style="color:var(--text-muted);">Chưa có từ vựng từ ngày hôm qua.</p>
+            <p class="text-sm mt-1" style="color:var(--text-muted);">Hãy lưu từ vựng trong các bài học!</p>
+          </div>
+          <div id="flashcard-area">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-sm" style="color:var(--text-muted);" id="fc-counter">0 / 0</span>
+              <div class="flex gap-2">
+                <span class="text-xs px-2 py-1 rounded" style="background:rgba(63,185,80,.1);color:var(--green-accent);" id="fc-known">✓ <span id="fc-known-count">0</span></span>
+                <span class="text-xs px-2 py-1 rounded" style="background:rgba(248,81,73,.1);color:var(--red-accent);" id="fc-unknown">✗ <span id="fc-unknown-count">0</span></span>
+              </div>
+            </div>
+            <div class="flashcard mx-auto mb-6" style="height:200px;max-width:400px;" id="current-flashcard" onclick="flipCard()">
+              <div class="flashcard-inner">
+                <div class="flashcard-front">
+                  <div class="text-xs mb-3 px-3 py-1 rounded-full" style="background:var(--bg-main);color:var(--text-muted);">Tiếng Anh</div>
+                  <div class="font-syne font-bold text-2xl" style="color:var(--text-primary);" id="fc-front">---</div>
+                  <div class="text-xs mt-3" style="color:var(--text-muted);">Nhấn để xem nghĩa</div>
+                </div>
+                <div class="flashcard-back">
+                  <div class="text-xs mb-3 px-3 py-1 rounded-full" style="background:rgba(56,139,253,.1);color:var(--blue-accent);">Ghi chú của bạn</div>
+                  <div class="text-lg font-medium" style="color:var(--text-primary);" id="fc-back">---</div>
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-center gap-4">
+              <button onclick="fcResult(false)" class="px-6 py-2.5 rounded-xl font-semibold" style="background:rgba(248,81,73,.12);border:1px solid rgba(248,81,73,.4);color:var(--red-accent);">✗ Chưa nhớ</button>
+              <button onclick="flipCard()" class="px-5 py-2.5 rounded-xl" style="background:var(--bg-surface);border:1px solid var(--border);color:var(--text-secondary);">↻ Lật</button>
+              <button onclick="fcResult(true)" class="px-6 py-2.5 rounded-xl font-semibold" style="background:rgba(63,185,80,.12);border:1px solid rgba(63,185,80,.4);color:var(--green-accent);">✓ Đã nhớ</button>
+            </div>
+          </div>
+        </div>
+        <!-- Quiz Tab -->
+        <div id="vocab-quiz-tab" class="hidden">
+          <div id="quiz-area" class="max-w-lg mx-auto">
+            <div class="card p-5 mb-4 text-center" style="min-height:120px;">
+              <div class="text-xs mb-2" style="color:var(--text-muted);">Chọn nghĩa đúng cho:</div>
+              <div class="font-syne font-bold text-2xl" style="color:var(--text-primary);" id="quiz-word">---</div>
+            </div>
+            <div id="quiz-options" class="grid grid-cols-2 gap-3"></div>
+            <div class="text-center mt-4 text-sm hidden" id="quiz-feedback" style="color:var(--green-accent);"></div>
+          </div>
+        </div>
+        <!-- All Words Tab -->
+        <div id="vocab-all-tab" class="hidden">
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-sm" style="color:var(--text-muted);" id="all-words-count">0 từ đã lưu</span>
+            <button onclick="clearAllVocab()" class="text-xs px-3 py-1.5 rounded" style="background:rgba(248,81,73,.1);color:var(--red-accent);border:1px solid rgba(248,81,73,.3);">🗑 Xóa tất cả</button>
+          </div>
+          <div id="all-words-list" class="space-y-2 max-h-80 overflow-y-auto"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAKEUP QUEUE -->
+    <div id="makeup-section" class="hidden fade-up">
+      <div class="card p-6" style="border-color:rgba(248,81,73,0.3);background:rgba(248,81,73,0.02);">
+        <h2 class="font-syne font-bold text-lg flex items-center gap-2 mb-4" style="color:var(--red-accent);">
+          <span>⚠️</span> Lớp Học Bù
+          <span id="makeup-count-badge" class="text-xs px-2 py-0.5 rounded-full font-mono" style="background:rgba(248,81,73,.2);color:var(--red-accent);">0</span>
+        </h2>
+        <p class="text-sm mb-5" style="color:var(--text-muted);">Các bài học bị bỏ lỡ. Hãy hoàn thành sớm để không bị tụt lại phía sau!</p>
+        <div id="makeup-queue" class="space-y-3"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-12 py-6 text-center" style="border-top:1px solid var(--border);">
+    <p class="text-xs" style="color:var(--text-muted);">Phòng Học Số Cá Nhân · Bean 2026 · <span style="color:var(--blue-accent);">PMP + IELTS 6.5</span> · Chúc học tốt! 🚀</p>
+  </footer>
+</div>
 
 <script>
-// ── QUOTES ──
-const QUOTES = [
-  {text:"Chuẩn bị kỹ lưỡng là chìa khóa thành công. Mỗi giờ lên kế hoạch giúp tiết kiệm 10 giờ thực hiện.",author:"Brian Tracy"},
-  {text:"Dự án thành công không phải do may mắn, mà do quản lý kỷ luật và tư duy có hệ thống.",author:"PMI Principle"},
-  {text:"Học tiếng Anh là mở thêm một cánh cửa vào thế giới. Mỗi ngày một từ mới là một bước tiến.",author:"Unknown"},
-  {text:"Sự kiên trì là cha đẻ của thành công. PMP không phải sprint, đó là marathon.",author:"Lê Thị Hồng"},
-  {text:"Quản lý dự án là nghệ thuật biến vision thành reality thông qua con người và quy trình.",author:"Harold Kerzner"},
-  {text:"IELTS 6.5 không xa nếu bạn học đúng cách, đúng tài liệu, đúng mỗi ngày.",author:"Bean's Mentor"},
-  {text:"Hành trình nghìn dặm bắt đầu từ một bước chân. Hôm nay, bước đó là mở sách ra.",author:"Lão Tử (adapted)"},
-  {text:"Stakeholder management: Hiểu người khác cần gì trước khi nói mình muốn gì.",author:"PMBOK 7 Principle"},
-  {text:"Value delivery không chỉ là deliver on time. Đó là deliver what matters.",author:"Agile Practice Guide"},
-  {text:"Đừng chờ cảm hứng. Hãy bắt đầu, cảm hứng sẽ theo sau.",author:"Jack London"},
+// =============================================
+// CORE DATA ENGINE
+// =============================================
+
+const START_DATE = new Date(2026, 5, 2); // June 2, 2026 (month is 0-indexed)
+const HOLIDAYS = ['2026-06-12', '2026-06-13'];
+
+const PM_QUOTES = [
+  '"Quản lý dự án giỏi không phải là làm nhiều, mà là làm đúng việc, đúng thời điểm." — Bean, PMP Journey 2026',
+  '"The secret of getting ahead is getting started." — Mark Twain',
+  '"A goal without a plan is just a wish. Plan it, execute it!" — PMP Principle',
+  '"Tiến bộ mỗi ngày một chút, sau một năm bạn sẽ không nhận ra chính mình." — Lời khuyên cho Bean',
+  '"Every project has risks; great PMs manage them before they manage you." — PMP Wisdom',
+  '"Language learning is not about perfection; it\'s about connection." — IELTS Journey',
+  '"Sự kiên trì là chìa khóa của thành công trong cả PMP lẫn tiếng Anh." — Triết lý học tập',
+  '"Manage people, not just tasks. Your stakeholders are your greatest resource." — PMP Core',
+  '"Phút thứ 10 hôm nay tốt hơn giờ thứ nhất ngày mai." — Quản lý thời gian',
+  '"IELTS 6.5 is not a mountain—it\'s a series of small hills. Climb daily." — Bean\'s Motto',
 ];
 
-// ── SCHEDULE DATA ──
-// Dates: Study starts June 2, 2026 (Tuesday)
-// Structure: Array of all study days with full lesson plan
-
-const HOLIDAYS = ['2026-06-12','2026-06-13'];
-const CLASS_DAY = 2; // Tuesday (0=Sun, 2=Tue)
-
-// Full curriculum data: 14 weeks × 5-6 days
-// Week 1: June 2-7 (Tue class, Wed-Sun self study)
-// Week 2: June 9-14 (Tue class, holidays 12-13)
-// ... continuing through end of September 2026
-
-function makeGCalLink(title, date, startTime, endTime, desc) {
-  const d = date.replace(/-/g,'');
-  const st = startTime.replace(':','')+'00';
-  const et = endTime.replace(':','')+'00';
-  const params = new URLSearchParams({
-    action:'TEMPLATE',
-    text:title,
-    dates:`${d}T${st}/${d}T${et}`,
-    details:desc,
-    location:'Bean Digital Classroom'
-  });
-  return `https://calendar.google.com/calendar/render?${params.toString()}`;
-}
-
-// ── CURRICULUM ENGINE ──
-// Session mapping: 14 sessions aligned with Atoha syllabus
-const ATOHA_SESSIONS = [
-  {num:1, topic:"Lesson 1-2: Introduction & The Big Picture", detail:"What is a project? Life cycles, development approaches, governance overview. ECO 3.1", eco:"ECO 3.1"},
-  {num:2, topic:"Lesson 3: Stakeholders, Vision & Communication (Part 1)", detail:"Engage stakeholders, develop a common vision, plan and manage communication. ECO 1.1–1.3", eco:"ECO 1.1–1.3"},
-  {num:3, topic:"Lesson 3: Stakeholders & Communication (Part 2)", detail:"Align and manage stakeholder expectations. ECO 1.4–1.5", eco:"ECO 1.4–1.5"},
-  {num:4, topic:"Lesson 4: Team, Conflict & Knowledge (Part 1)", detail:"Lead and structure the team, manage conflict. ECO 1.6–1.7", eco:"ECO 1.6–1.7"},
-  {num:5, topic:"Lesson 4: Knowledge Transfer & Team Dynamics", detail:"Ensure knowledge transfer, team collaboration models. ECO 1.8", eco:"ECO 1.8"},
-  {num:6, topic:"Lesson 5: Core Planning — Scope & Value (Part 1)", detail:"Developing Scope and Value Orientation. PMBOK Principle: Deliver Value. ECO 2.2", eco:"ECO 2.2"},
-  {num:7, topic:"⭐ Kiểm tra giữa kỳ — Mid-term Review", detail:"Review Lessons 1-5, consolidate ECO 1.x and 3.1. Practice questions.", eco:"All ECO 1.x"},
-  {num:8, topic:"Lesson 5: Risk, Compliance & Finance", detail:"Risk and Compliance Foundations, Plan and Manage Finance. ECO 2.3–2.4", eco:"ECO 2.3–2.4"},
-  {num:9, topic:"Lesson 5: Resource Planning & Integration", detail:"Plan and Manage Resources, Resource leveling. ECO 2.6, 3.2, 3.5", eco:"ECO 2.6, 3.2"},
-  {num:10, topic:"Lesson 6: Integrated Planning — Method & Plan", detail:"Developing Integrated Project Management Plan. ECO 2.1", eco:"ECO 2.1"},
-  {num:11, topic:"Lesson 6: Schedule & Quality Planning", detail:"Planning and Managing the Schedule, Quality of Deliverables. ECO 2.5, 2.7", eco:"ECO 2.5, 2.7"},
-  {num:12, topic:"Lesson 6: Procurement Planning", detail:"Planning and Managing Procurement. ECO 2.8", eco:"ECO 2.8"},
-  {num:13, topic:"Lesson 7: Execution, Monitoring & Change", detail:"Evaluate Project Status, Manage Artifacts, Manage Changes, Remove Impediments. ECO 2.9, 3.3–3.4", eco:"ECO 2.9, 3.3–3.4"},
-  {num:14, topic:"Lesson 8: Business Environment & Closure", detail:"External Business Environment, Organizational Change, Continuous Improvement, Closures. ECO 2.10, 3.6–3.8", eco:"ECO 2.10, 3.6–3.8"},
-  {num:15, topic:"Lesson 9: Next Steps — Giải đề & Fill the Gaps", detail:"Practice exam questions, review weak areas, final preparation strategy.", eco:"All ECO"},
-  {num:16, topic:"⭐ Ôn tập Cuối kỳ — Final Review & Mock Exam", detail:"Full mock exam review, comprehensive gap analysis, exam-day strategy.", eco:"All ECO"},
+// =============================================
+// PMP CURRICULUM STRUCTURE (10 Knowledge Areas)
+// =============================================
+const PMP_CURRICULUM = [
+  { week: 1, domain: 'Khai Mở Dự Án', icon: '🚀', color: '#388bfd', topics: ['Dự án là gì? Vòng đời dự án', 'Project Charter & Business Case', 'Identify Stakeholders', 'Phương pháp luận Predictive vs Agile vs Hybrid'] },
+  { week: 2, domain: 'Phạm Vi Dự Án (Scope)', icon: '🎯', color: '#3fb950', topics: ['Scope Planning & WBS', 'Collect Requirements', 'Define Scope', 'WBS Dictionary & Scope Baseline'] },
+  { week: 3, domain: 'Lịch Trình (Schedule)', icon: '📅', color: '#a371f7', topics: ['Schedule Management Plan', 'Activity Sequencing & Network Diagram', 'Critical Path Method (CPM)', 'Schedule Compression: Crashing & Fast-Tracking'] },
+  { week: 4, domain: 'Chi Phí (Cost)', icon: '💰', color: '#d29922', topics: ['Cost Estimation & Budgeting', 'Earned Value Management (EVM)', 'CPI / SPI / VAC / EAC', 'Cost Baseline & Funding Requirements'] },
+  { week: 5, domain: 'Chất Lượng (Quality)', icon: '⭐', color: '#2ea8a0', topics: ['Quality Management Plan', 'Quality Metrics & Checklists', 'Quality Audits', 'Continuous Improvement & Kaizen'] },
+  { week: 6, domain: 'Nguồn Lực (Resources)', icon: '👥', color: '#db61a2', topics: ['Resource Planning & RACI Matrix', 'Team Development (Tuckman Model)', 'Conflict Resolution & Leadership Styles', 'Virtual Teams & Remote Management'] },
+  { week: 7, domain: 'Truyền Thông (Communication)', icon: '📡', color: '#388bfd', topics: ['Communication Management Plan', 'Stakeholder Engagement Matrix', 'Meeting Management & Reporting', 'Communication Channels Formula'] },
+  { week: 8, domain: 'Rủi Ro (Risk)', icon: '⚡', color: '#f85149', topics: ['Risk Identification & Risk Register', 'Qualitative & Quantitative Analysis', 'Risk Response Strategies (TAME)', 'Risk Monitoring & Control'] },
+  { week: 9, domain: 'Mua Sắm (Procurement)', icon: '🤝', color: '#d29922', topics: ['Make-or-Buy Analysis', 'Contract Types (FFP, CPFF, T&M)', 'Source Selection Criteria', 'Contract Administration & Closeout'] },
+  { week: 10, domain: 'Agile & Hybrid', icon: '🔄', color: '#3fb950', topics: ['Scrum Framework (Sprint, Velocity, Burndown)', 'Kanban & Lean Principles', 'SAFe & Scaled Agile', 'Hybrid Approaches & PMI-ACP Mindset'] },
+  { week: 11, domain: 'Đóng Gói & Tổng Ôn', icon: '🏆', color: '#a371f7', topics: ['Project Closure Checklist', 'Lessons Learned & Knowledge Transfer', 'Mock Exam Practice (200 questions)', 'Final Exam Simulation & Strategy'] },
 ];
 
-const BBC_EPISODES = [
-  {ep:"Ep. 352", title:"Why do we find things funny?", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2024/ep-240104"},
-  {ep:"Ep. 355", title:"Could you live without a smartphone?", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2024"},
-  {ep:"Ep. 360", title:"The science of sleep", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 362", title:"What makes a good leader?", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 365", title:"How to manage stress at work", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 368", title:"The future of remote work", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 370", title:"Digital skills for everyone", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 373", title:"How to be more productive", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 376", title:"The power of habits", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 379", title:"Managing time effectively", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 381", title:"Working in teams", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 384", title:"Decision making under pressure", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 387", title:"The language of negotiation", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 390", title:"Presenting ideas confidently", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 393", title:"What is critical thinking?", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 396", title:"Giving and receiving feedback", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 399", title:"Cross-cultural communication", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
-  {ep:"Ep. 402", title:"Artificial intelligence at work", url:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"},
+// =============================================
+// ENGLISH MUSIC SCHEDULE (alternating daily)
+// =============================================
+const MUSIC_SCHEDULE = [
+  { song: '"Somewhere Only We Know" – Keane', tasks: 'Nghe 2 lần, chép 5 thành ngữ, luyện phát âm theo', focus: 'Idioms: "come to an end", "last time", "trace"' },
+  { song: '"Fix You" – Coldplay', tasks: 'Shadow-singing verse 1 & chorus, chú ý âm /ɪ/ và /uː/', focus: 'Phonology: vowel reduction trong connected speech' },
+  { song: '"A Sky Full of Stars" – Coldplay', tasks: 'Phân tích cấu trúc câu trong lyrics, tìm 3 metaphor', focus: 'Grammar: comparatives in lyrics; Figurative language' },
+  { song: '"Let Her Go" – Passenger', tasks: 'Chép toàn bộ chorus, identify conditional structures', focus: 'Grammar: "Only know X when Y" = conditional emphasis' },
+  { song: '"The Scientist" – Coldplay', tasks: 'Luyện âm /θ/ (think, through), shadow cả bài một lần', focus: 'Phonology: th-sounds, intonation in questions' },
+  { song: '"Someone Like You" – Adele', tasks: 'Ghi ra 5 từ khó, tra nghĩa & dùng trong câu mới của bạn', focus: 'Vocabulary in context; Verb tenses: past simple narration' },
+  { song: '"Counting Stars" – OneRepublic', tasks: 'Vẽ word map cho topic "dreams & ambition" từ bài hát', focus: 'Collocations: "dream about", "believe in", "lose count"' },
 ];
 
-const IELTS_READING_TASKS = [
-  {topic:"Project Management Basics", task:"Đọc bài IELTS Reading về Business Management. Gạch chân: project, stakeholder, deliverable, milestone. Trả lời 10 câu T/F/NG.", url:"https://www.britishcouncil.org/exam/ielts/ielts-preparation-resources"},
-  {topic:"Leadership in Organizations", task:"TED-Ed: 'What makes a great leader?' — Nghe 2 lần, viết summary 80 từ. Tập ngữ pháp: so sánh (more effective than...)", url:"https://www.ted.com/talks"},
-  {topic:"Risk Management in Business", task:"British Council Free Prep: Bài reading về risk. Luyện kỹ năng skimming (3 phút/passage). Từ mới: mitigate, contingency, likelihood.", url:"https://learnenglish.britishcouncil.org/skills/reading"},
-  {topic:"Communication at the Workplace", task:"IELTS Liz Reading Practice: Bài về communication strategies. Tập True/False/Not Given. Mục tiêu: 7/8 câu đúng.", url:"https://ieltsliz.com/ielts-reading/"},
-  {topic:"Agile & Technology", task:"TED-Ed: 'How does agile methodology work?' — Dictation: Nghe từng câu, viết lại, so sánh với script. Học 5 từ mới kỹ thuật.", url:"https://www.ted.com/talks"},
-  {topic:"Project Lifecycle Reading", task:"British Council: Đọc passage về project phases (band 5-6 level). Tập kỹ năng scanning headers. Viết 3 câu tóm tắt.", url:"https://learnenglish.britishcouncil.org/skills/reading/b1-reading"},
-  {topic:"Workplace Problem Solving", task:"IELTS reading matching headings exercise. Thực hành: đọc heading trước, dự đoán nội dung đoạn văn.", url:"https://ieltsliz.com/ielts-reading/"},
-  {topic:"Budget & Finance English", task:"TED-Ed Talk về financial literacy. Nghe chép: 'The first [blank] of project finance is...' Từ vựng: budget, forecast, variance.", url:"https://www.ted.com/talks"},
-  {topic:"Stakeholder Management", task:"British Council: Passage về managing relationships. Luyện summary completion. Scaffold: Stakeholder = người liên quan.", url:"https://learnenglish.britishcouncil.org/"},
-  {topic:"Quality Management", task:"TED-Ed: 'What is quality in business?' — Xem + viết outline 5 ý chính. Từ mới: benchmark, defect, inspection.", url:"https://www.ted.com/talks"},
-  {topic:"Schedule & Planning", task:"IELTS Reading: bài về time management và scheduling. Tập diagram completion. Mục tiêu: hoàn thành trong 18 phút.", url:"https://ieltsliz.com/"},
-  {topic:"Procurement & Supply Chain", task:"British Council B1: Reading passage về supply chain. Vocabulary task: match terms to definitions. 3 từ mới: procurement, vendor, contract.", url:"https://learnenglish.britishcouncil.org/"},
-  {topic:"Change Management", task:"TED-Ed: 'The psychology of change' — Listening comprehension. Viết 3 câu phản hồi ý kiến của diễn giả.", url:"https://www.ted.com/talks"},
-  {topic:"Project Closure & Review", task:"IELTS Academic Reading full passage: Business case study. Tập cả 3 dạng câu hỏi. Đặt mục tiêu 6.5-level accuracy.", url:"https://ieltsliz.com/ielts-reading/"},
+// =============================================
+// PASSIVE LISTENING SCHEDULE
+// =============================================
+const PASSIVE_TOPICS = [
+  'BBC Learning English – 6-Minute English: "Future of Remote Work"',
+  'TED-Ed: "How to speak so people want to listen" – Julian Treasure',
+  'BBC Business Daily: "AI in Project Management" (15 min)',
+  'EnglishClass101 – Intermediate Listening: Office & Workplace',
+  'TED Talk: "The puzzle of motivation" – Dan Pink (18 min)',
+  'BBC Learning English – News Review: Technology & Innovation',
+  'IELTS Listening Practice – Section 3 & 4 (Academic)',
+  'Deep English: "The Power of Habits" (shadowing exercise)',
+  'BBC Learning English – The English We Speak: Office idioms',
+  'TED-Ed: "How to give a great presentation" (Active note-taking)',
+  'EnglishClass101 – Business English: Meetings & Negotiations',
+  'IELTS Listening Full Test – Cambridge Practice',
 ];
 
-const PMP_SELF_STUDY = [
-  {topic:"ECO Overview & PMBOK 7 Principles", tasks:["Đọc Exam Content Outline (ECO) trang 1-10", "PMBOK 7: Đọc 12 Project Management Principles (trang 28-62)", "Ghi chú: So sánh Predictive vs Agile vs Hybrid approach", "Làm flashcard 10 từ viết tắt PMP quan trọng: PM, PMO, PMBOK, ECO, ATP..."], pmbok:"PMBOK 7 - Chapter 1: Introduction"},
-  {topic:"Project Charter & Business Case", tasks:["PMI Exam Prep: Lesson 1 — What is a project?", "Thực hành viết Project Charter ngắn (1 trang) cho một dự án ảo", "Concept: Project vs Program vs Portfolio", "Ôn lại ECO 3.1 — Business Acumen tasks"], pmbok:"PMBOK 7 - Performance Domains: Stakeholder"},
-  {topic:"Stakeholder Engagement (ECO 1.1–1.2)", tasks:["PMI Exam Prep: Lesson 3 — Engage stakeholders", "Vẽ sơ đồ Stakeholder Register mẫu", "Key concept: Salience Model (Power/Interest/Urgency)", "Làm 5-10 câu hỏi practice: Stakeholder engagement"], pmbok:"PMBOK 7 - Stakeholder Performance Domain"},
-  {topic:"Communication Management", tasks:["PMI Exam Prep: Lesson 3 — Plan and manage communication", "Công thức channels: N×(N-1)/2 — luyện thuộc", "Communication methods: Push/Pull/Interactive", "Làm 10 câu practice về Communication Management"], pmbok:"PMBOK 7 - Team Performance Domain"},
-  {topic:"Team Building & Leadership Styles", tasks:["PMI Exam Prep: Lesson 4 — Lead and structure the team", "Leadership styles: Servant, Transformational, Transactional", "Tuckman model: Forming → Storming → Norming → Performing → Adjourning", "Làm flashcard cho 5 conflict resolution techniques"], pmbok:"PMBOK 7 - Team Performance Domain"},
-  {topic:"Conflict Management & Motivation", tasks:["PMI Exam Prep: Lesson 4 — Manage conflict", "Conflict resolution: Confront > Compromise > Smooth > Force > Withdraw", "Motivation theories: Maslow, Herzberg, McGregor X/Y, McClelland", "Ôn lại ECO 1.6–1.8 với practice questions"], pmbok:"PMBOK 7 - Team + Stakeholder Domain"},
-  {topic:"Scope Management & WBS", tasks:["PMI Exam Prep: Lesson 5 — Scope and Value", "Tạo WBS (Work Breakdown Structure) đơn giản cho dự án ảo", "Scope Creep: định nghĩa và cách phòng ngừa", "Concept: Requirements Traceability Matrix", "20 câu practice về Scope Management"], pmbok:"PMBOK 7 - Planning Performance Domain"},
-  {topic:"Mid-term Review — ECO 1.x + Scope", tasks:["Ôn lại toàn bộ ECO 1.1–1.8 và ECO 2.2", "Tự tạo 10 câu hỏi kiểm tra và trả lời", "Mở NotebookLM AI Assistant: hỏi về các điểm yếu", "Lập danh sách 5 gaps cần bù trong tuần tới"], pmbok:"Tổng hợp ECO 1.x"},
-  {topic:"Risk Management (ECO 2.3)", tasks:["PMI Exam Prep: Lesson 5 — Risk and Compliance", "Risk Register: Identify, Analyze (Probability × Impact), Response", "Risk response strategies: Avoid, Transfer, Mitigate, Accept", "Agile risk: Spikes và risk-based backlog prioritization", "15 câu practice về Risk Management"], pmbok:"PMBOK 7 - Uncertainty Performance Domain"},
-  {topic:"Financial Management (ECO 2.4)", tasks:["PMI Exam Prep: Lesson 5 — Plan and Manage Finance", "EVM formulas: SV=EV-PV, CV=EV-AC, SPI=EV/PV, CPI=EV/AC", "Học VAC, BAC, EAC, ETC — luyện tính toán", "Làm 10 bài tính EVM với số liệu cụ thể", "Agile: Velocity và Burndown chart"], pmbok:"PMBOK 7 - Planning Domain"},
-  {topic:"Resource & Schedule Planning", tasks:["PMI Exam Prep: Lesson 5 & 6 — Resources & Schedule", "Resource leveling vs resource smoothing — sự khác biệt", "Critical Path Method (CPM): tính ES, EF, LS, LF, Float", "Gantt Chart vs Network Diagram vs Kanban Board", "20 câu practice về Schedule"], pmbok:"PMBOK 7 - Planning Domain"},
-  {topic:"Quality & Procurement (ECO 2.5, 2.7, 2.8)", tasks:["PMI Exam Prep: Lesson 6 — Quality and Procurement", "Quality: Prevention > Inspection, COQ (Cost of Quality)", "Contract types: FFP, CPFF, CPPC, T&M — khi nào dùng loại nào?", "Agile quality: Definition of Done, Acceptance Criteria", "20 câu practice về Quality + Procurement"], pmbok:"PMBOK 7 - Delivery Domain"},
-  {topic:"Execution, Change & Issue Management", tasks:["PMI Exam Prep: Lesson 7 — Execution and Monitoring", "Change Control Process: Request → Impact Analysis → CCB → Implement", "Issue Log vs Risk Register — sự khác nhau", "Impediment removal trong Scrum (Sprint Retrospective)", "15 câu practice về Change Management"], pmbok:"PMBOK 7 - Measurement Domain"},
-  {topic:"Business Environment & Closure", tasks:["PMI Exam Prep: Lesson 8 — Business Environment and Closure", "OPA (Organizational Process Assets) vs EEF (Enterprise Environmental Factors)", "Lessons Learned vs Retrospective — so sánh", "Project closure checklist: 7 bước đóng dự án chuẩn PMI", "30 câu practice tổng hợp — cuối kỳ"], pmbok:"PMBOK 7 - All Domains"},
+// =============================================
+// ACTIVE ENGLISH SESSIONS
+// =============================================
+const ENGLISH_SESSIONS = [
+  { focus: 'IELTS Reading: Skimming & Scanning kỹ thuật', tasks: 'Đọc 1 passage Academic, highlight keywords, luyện True/False/NG. Mục tiêu: 9/13 câu đúng.' },
+  { focus: 'IELTS Writing Task 1: Mô tả biểu đồ (Bar Chart / Line Graph)', tasks: 'Viết 180 từ mô tả 1 biểu đồ. Dùng: "increased significantly", "remained stable", "peaked at". Nộp cho Grammarly review.' },
+  { focus: 'IELTS Writing Task 2: Opinion Essay', tasks: 'Viết 260 từ về chủ đề "Technology changes workplace". Cấu trúc: Intro → 2 body paragraphs → Conclusion.' },
+  { focus: 'IELTS Speaking Part 1 & 2: Fluency Drill', tasks: 'Record 2 câu trả lời Part 1 (Work/Study, Hometown). Record 1 bài Part 2 (2 phút về chủ đề quen thuộc). Tự nghe lại, note lỗi.' },
+  { focus: 'Grammar: Conditionals 1, 2, 3 – PMP Context', tasks: 'Học 3 cấu trúc conditional với ví dụ dự án thực tế. Viết 6 câu ví dụ riêng (mỗi loại 2 câu). Kiểm tra với Grammarly.' },
+  { focus: 'Vocabulary Building: Business & PM Collocations', tasks: 'Học 20 collocation chủ đề "Project Management": "meet the deadline", "exceed the budget", "mitigate risks"... Làm flashcard.' },
+  { focus: 'IELTS Reading: Full Academic Section', tasks: 'Làm 1 IELTS Academic Reading section đầy đủ (3 passages, 40 câu, 60 phút). Chấm và phân tích lỗi sai.' },
+  { focus: 'Pronunciation: Word Stress & Sentence Stress', tasks: 'Luyện 30 từ đa âm tiết liên quan PMP. Dùng Forvo.com. Practice: "PROject" vs "proJECT", "CONflict" vs "conFLICT".' },
+  { focus: 'IELTS Writing: Academic Task 1 – Process Diagram', tasks: 'Mô tả 1 process diagram (quy trình sản xuất/dự án). 175–200 từ. Passive voice cho quy trình.' },
+  { focus: 'Speaking: Presentation Skills in English', tasks: 'Chuẩn bị và record 3-phút presentation về "What is PMP?". Dùng signpost language: "First of all...", "Moving on to...", "To summarize...".' },
+  { focus: 'IELTS Listening: Maps & Plans (Section 2)', tasks: 'Luyện 2 bài Listening Section 2 (map completion). Tập nghe direction words: "opposite", "next to", "adjacent to".' },
+  { focus: 'Grammar: Articles (a/an/the/Ø) – Common Mistakes', tasks: 'Review 50 câu về articles thường gặp. Bài tập fill-in-blank với văn bản PM. Mục tiêu: 0 lỗi article trong writing.' },
 ];
 
-// Generate all study days from June 2, 2026
-function generateStudyDays() {
-  const days = [];
-  const start = new Date('2026-06-02T00:00:00');
-  // Generate 14 weeks = 98 days, filter to weekdays only
-  let sessionCounter = 0;
-  let studyDayCounter = 0;
-  let pmpTopicIdx = 0;
-  let engTopicIdx = 0;
-  let bbcIdx = 0;
+// =============================================
+// DAILY SCHEDULE TEMPLATE BUILDER
+// =============================================
+function buildDaySchedule(date, dayIndex) {
+  const dow = date.getDay(); // 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+  const dateStr = formatDateKey(date);
+  const isHoliday = HOLIDAYS.includes(dateStr);
+  const weekNum = Math.floor(dayIndex / 7) + 1;
+  const pmpPhase = PMP_CURRICULUM[Math.min(weekNum - 1, PMP_CURRICULUM.length - 1)];
+  const dayInWeek = dayIndex % 7;
+  const musicIdx = dayIndex % MUSIC_SCHEDULE.length;
+  const passiveIdx = dayIndex % PASSIVE_TOPICS.length;
+  const engIdx = dayIndex % ENGLISH_SESSIONS.length;
+  const pmpTopicIdx = Math.min(Math.floor(dayIndex / 7) * 4 + (dayIndex % 5), pmpPhase.topics.length - 1);
 
-  for (let i = 0; i < 98; i++) {
-    const d = new Date(start);
-    d.setDate(start.getDate() + i);
-    const dow = d.getDay();
-    const dateStr = d.toISOString().split('T')[0];
-    const isHoliday = HOLIDAYS.includes(dateStr);
-    const isClassDay = dow === 2; // Tuesday
-    const isWeekend = dow === 0 || dow === 6;
-
-    if (isWeekend) continue;
-
-    studyDayCounter++;
-    const weekNum = Math.ceil(studyDayCounter / 5);
-
-    const dayData = {
-      date: dateStr,
-      dayJS: new Date(d),
-      dayNum: studyDayCounter,
-      weekNum: Math.ceil(studyDayCounter / 5),
-      isHoliday,
-      isClassDay,
-      lessons: []
+  // SUNDAY = OFF
+  if (dow === 0) {
+    return {
+      type: 'off',
+      lessons: [
+        { id: `off-${dateStr}`, type: 'passive', emoji: '😴', title: 'Ngày nghỉ hoàn toàn', time: 'Cả ngày', target: 'Nạp năng lượng cho tuần mới', instruction: 'Hôm nay không học. Hãy nghỉ ngơi, đi dạo, xem phim tiếng Anh giải trí. Bạn đã làm việc chăm chỉ cả tuần rồi! 🌟', isOff: true }
+      ]
     };
-
-    if (isHoliday) {
-      // Light/passive day
-      dayData.lessons = [
-        {
-          id:`${dateStr}-passive`,
-          type:'passive',
-          time:'07:00 – 07:30',
-          title:'Nghe thụ động: BBC 6 Minute English',
-          subtitle:'Passive Listening trong lúc đưa con đi học',
-          tag:'passive',
-          target:'Nghe không cần chú ý cao — thư giãn, hấp thụ ngữ điệu tự nhiên',
-          instruction:`🌅 Ngày nghỉ lễ — Chế độ học nhẹ\n\n📻 Podcast: ${BBC_EPISODES[bbcIdx%BBC_EPISODES.length].ep} — "${BBC_EPISODES[bbcIdx%BBC_EPISODES.length].title}"\n\n✅ Chỉ nghe 1 lần trong xe hoặc đi bộ. Không cần ghi chép. Nghỉ ngơi là cần thiết cho não bộ tiếp thu kiến thức.`,
-          resources:[{label:'BBC 6 Min English',url:BBC_EPISODES[bbcIdx%BBC_EPISODES.length].url,color:'amber'}],
-          startHour:'07:00', endHour:'07:30'
-        },
-        {
-          id:`${dateStr}-rest`,
-          type:'free',
-          time:'Cả ngày',
-          title:'Ngày nghỉ lễ — Ôn bài nhẹ tùy ý',
-          subtitle:'Không bắt buộc — tự chọn hoạt động',
-          tag:'break',
-          target:'Nghỉ ngơi, sạc năng lượng cho tuần học tiếp theo',
-          instruction:`🎉 Ngày nghỉ lễ công ty — Bạn KHÔNG cần học bài bắt buộc hôm nay!\n\n💡 Nếu muốn học nhẹ (tùy chọn):\n• Xem lại flashcard PMP 15-20 phút\n• Nghe thêm 1-2 tập BBC 6 Min English\n• Đọc lại ghi chú của các buổi trước\n• Review vocabulary list đã học\n\n🔋 Quan trọng nhất: Nghỉ ngơi và nạp năng lượng!`,
-          resources:[],
-          startHour:'10:00', endHour:'11:00'
-        }
-      ];
-    } else if (isClassDay) {
-      sessionCounter++;
-      const sess = ATOHA_SESSIONS[Math.min(sessionCounter-1, ATOHA_SESSIONS.length-1)];
-      dayData.lessons = [
-        {
-          id:`${dateStr}-passive`,
-          type:'passive',
-          time:'07:00 – 07:30',
-          title:'Nghe thụ động: BBC 6 Minute English',
-          subtitle:'Trong xe lúc đưa con đi học',
-          tag:'passive',
-          target:'Luyện tai nghe ngữ điệu Anh-Anh tự nhiên, không áp lực',
-          instruction:`📻 Episode: ${BBC_EPISODES[bbcIdx%BBC_EPISODES.length].ep} — "${BBC_EPISODES[bbcIdx%BBC_EPISODES.length].title}"\n\n📌 Phương pháp: Nghe 1 lần không cần dừng. Chú ý rhythm và intonation. Cố gắng bắt 3-5 từ mới nghe được.\n\n💡 Tip cho B1: Không cần hiểu 100% — cứ quen tai là tiến bộ!`,
-          resources:[{label:'BBC Learning English',url:BBC_EPISODES[bbcIdx%BBC_EPISODES.length].url,color:'amber'},{label:'Spotify Podcast',url:'https://open.spotify.com/show/bbc-6-minute-english',color:'green'}],
-          startHour:'07:00', endHour:'07:30'
-        },
-        {
-          id:`${dateStr}-english`,
-          type:'english',
-          time:'09:00 – 10:30',
-          title:`IELTS Reading/Listening — ${IELTS_READING_TASKS[engTopicIdx%IELTS_READING_TASKS.length].topic}`,
-          subtitle:'Intensive English Session với Pomodoro 25/5',
-          tag:'english',
-          target:`Mục tiêu: ${IELTS_READING_TASKS[engTopicIdx%IELTS_READING_TASKS.length].task.substring(0,60)}...`,
-          instruction:`🎯 Phương pháp Scaffolding + Pomodoro:\n\n⏱ Pomodoro 1 (25 min): ${IELTS_READING_TASKS[engTopicIdx%IELTS_READING_TASKS.length].task}\n⏱ Break (5 min): Đứng dậy, vận động nhẹ\n⏱ Pomodoro 2 (25 min): Làm bài tập + kiểm tra đáp án\n⏱ Break (5 min): Uống nước\n⏱ Pomodoro 3 (25 min): Vocabulary review + ghi chú từ mới vào notebook\n\n📖 Scaffolding: Mỗi từ PMP khó → tìm English definition → dịch VN → dùng trong ví dụ`,
-          resources:[
-            {label:'British Council Free',url:'https://learnenglish.britishcouncil.org/skills/reading',color:'cyan'},
-            {label:'IELTS Liz',url:'https://ieltsliz.com/ielts-reading/',color:'cyan'},
-            {label:'TED-Ed',url:'https://ed.ted.com',color:'cyan'},
-            {label:'Cambridge Dictionary',url:'https://dictionary.cambridge.org/',color:'cyan'},
-          ],
-          startHour:'09:00', endHour:'10:30'
-        },
-        {
-          id:`${dateStr}-prep`,
-          type:'pmp',
-          time:'14:00 – 15:30',
-          title:`Chuẩn bị buổi học Atoha — ${sess.topic}`,
-          subtitle:`Session ${sess.num} — Đọc trước tài liệu PMI Exam Prep`,
-          tag:'pmp',
-          target:`Đọc trước ${sess.pmbok} — hiểu 70% trước khi vào lớp`,
-          instruction:`📚 Chuẩn bị trước buổi học tối nay (19:00):\n\n1️⃣ Đọc PMI® Authorized Exam Prep: ${sess.topic}\n2️⃣ ${sess.detail}\n3️⃣ Viết ra 3 câu hỏi bạn chưa hiểu để hỏi giảng viên\n4️⃣ Xem lại PMBOK 7: ${sess.pmbok}\n\n🤖 Nếu có khái niệm khó → Mở NotebookLM AI Assistant hỏi ngay!\n\n📝 Phương pháp: Đọc heading trước → đọc kỹ → ghi tóm tắt`,
-          resources:[
-            {label:'Atoha LMS',url:'https://www.atoha.com',color:''},
-            {label:'PMBOK 7 Free Preview',url:'https://www.pmi.org/pmbok-guide-standards',color:''},
-            {label:'PMI ECO 2026',url:'https://www.pmi.org/-/media/pmi/documents/public/pdf/certifications/new-pmp-examination-content-outline-2026',color:''},
-          ],
-          startHour:'14:00', endHour:'15:30'
-        },
-        {
-          id:`${dateStr}-class`,
-          type:'class',
-          time:'19:00 – 21:30',
-          title:`📡 LIVE — Lớp học Atoha PMP: ${sess.topic}`,
-          subtitle:'BUỔI HỌC TRỰC TUYẾN BẮT BUỘC — Không được bỏ',
-          tag:'class',
-          target:'Tham gia đầy đủ, ghi chép, đặt câu hỏi chủ động trong buổi học',
-          instruction:`🎓 BUỔI HỌC CHÍNH THỨC ATOHA — ${sess.topic}\n\n✅ Checklist trước khi vào lớp:\n• Đã đọc trước tài liệu buổi chiều?\n• Sạc laptop/điện thoại đầy đủ?\n• Tai nghe hoạt động tốt?\n• Có sổ ghi chép sẵn sàng?\n• Câu hỏi chuẩn bị sẵn từ buổi sáng?\n\n📌 Trong lớp:\n• Ghi chép: Gạch chân từ khoá, concept mới\n• Đặt câu hỏi: Ít nhất 1 câu hỏi/buổi\n• Sau lớp: Làm bài tập ${sess.eco} trên LMS Atoha`,
-          resources:[
-            {label:'Zoom Link Atoha',url:'https://www.atoha.com',color:'purple'},
-            {label:'Group Zalo Lớp',url:'https://zalo.me',color:'purple'},
-            {label:'LMS Atoha',url:'https://www.atoha.com/account',color:'purple'},
-          ],
-          startHour:'19:00', endHour:'21:30'
-        }
-      ];
-      bbcIdx++; engTopicIdx++;
-    } else {
-      // Regular self-study day
-      const pmpData = PMP_SELF_STUDY[pmpTopicIdx%PMP_SELF_STUDY.length];
-      dayData.lessons = [
-        {
-          id:`${dateStr}-passive`,
-          type:'passive',
-          time:'07:00 – 07:30',
-          title:'Nghe thụ động: BBC 6 Minute English',
-          subtitle:'Trong xe lúc đưa con đi học',
-          tag:'passive',
-          target:'Luyện tai, tiếp xúc với giọng Anh tự nhiên mỗi sáng',
-          instruction:`📻 Episode: ${BBC_EPISODES[bbcIdx%BBC_EPISODES.length].ep} — "${BBC_EPISODES[bbcIdx%BBC_EPISODES.length].title}"\n\n💡 Phương pháp:\n• Lần 1: Nghe tổng thể (không dừng)\n• Trong ngày nếu có thời gian rảnh: Nghe lần 2, chú ý từ vựng liên quan PMP\n\n🎯 Mục tiêu cuối tuần: Tổng kết 5 từ mới từ các tập đã nghe trong tuần`,
-          resources:[{label:'BBC Learning English',url:BBC_EPISODES[bbcIdx%BBC_EPISODES.length].url,color:'amber'}],
-          startHour:'07:00', endHour:'07:30'
-        },
-        {
-          id:`${dateStr}-english`,
-          type:'english',
-          time:'09:00 – 10:30',
-          title:`IELTS Intensive — ${IELTS_READING_TASKS[engTopicIdx%IELTS_READING_TASKS.length].topic}`,
-          subtitle:'English Study Block — Scaffolding Method + Pomodoro',
-          tag:'english',
-          target:`Focus: ${IELTS_READING_TASKS[engTopicIdx%IELTS_READING_TASKS.length].task.substring(0,70)}`,
-          instruction:`🎯 IELTS Session — Phương pháp Scaffolding:\n\n⏱ Pomodoro 1 (25 min): ${IELTS_READING_TASKS[engTopicIdx%IELTS_READING_TASKS.length].task}\n⏱ Break (5 min): Vận động\n⏱ Pomodoro 2 (25 min): Phân tích đáp án + vocab review\n⏱ Break (5 min): Uống nước\n⏱ Pomodoro 3 (25 min): Dictation practice — Nghe câu, viết lại, kiểm tra\n\n📌 Scaffolding cho B1→B2: Mỗi từ mới học theo chuỗi:\n• Nghĩa VN → Ví dụ câu → Collocations → Dùng trong ngữ cảnh PMP`,
-          resources:[
-            {label:'British Council',url:'https://learnenglish.britishcouncil.org/',color:'cyan'},
-            {label:'IELTS Liz',url:'https://ieltsliz.com/',color:'cyan'},
-            {label:'TED-Ed',url:'https://ed.ted.com',color:'cyan'},
-          ],
-          startHour:'09:00', endHour:'10:30'
-        },
-        {
-          id:`${dateStr}-break1`,
-          type:'free',
-          time:'10:30 – 10:50',
-          title:'Nghỉ giải lao — 20 phút',
-          subtitle:'Đứng dậy, vận động, uống nước',
-          tag:'break',
-          target:'Tái tạo năng lượng não bộ trước buổi PMP chiều',
-          instruction:`🧘 Nghỉ ngơi đúng cách:\n• Đứng dậy khỏi màn hình\n• Vận động nhẹ 5-10 phút\n• Uống ít nhất 1 ly nước\n• KHÔNG cuộn mạng xã hội\n• Nhìn xa 5 phút để nghỉ mắt`,
-          resources:[],
-          startHour:'10:30', endHour:'10:50'
-        },
-        {
-          id:`${dateStr}-pmp-afternoon`,
-          type:'pmp',
-          time:'14:00 – 16:00',
-          title:`PMP Self-Study: ${pmpData.topic}`,
-          subtitle:`PMBOK 7 + PMI Exam Prep — ${pmpData.pmbok}`,
-          tag:'pmp',
-          target:`Hoàn thành: ${pmpData.tasks[0]}`,
-          instruction:`📚 PMP Study Session — Pomodoro Method:\n\n⏱ P1 (25 min): ${pmpData.tasks[0]}\n⏱ Break\n⏱ P2 (25 min): ${pmpData.tasks[1] || 'Practice questions 10 câu'}\n⏱ Break\n⏱ P3 (25 min): ${pmpData.tasks[2] || 'Review và ghi flashcard'}\n⏱ Break\n⏱ P4 (25 min): ${pmpData.tasks[3] || 'Tổng kết và viết tóm tắt 1 trang'}\n\n🤖 Gặp khái niệm khó? → Mở AI Assistant NotebookLM ngay!\n\n📖 Tham khảo: ${pmpData.pmbok}`,
-          resources:[
-            {label:'PMI Exam Prep (Atoha LMS)',url:'https://www.atoha.com/account',color:''},
-            {label:'NotebookLM AI',url:'https://notebooklm.google.com/notebook/a63cf3d6-4be7-45fe-8e5a-1b8a44cb036c',color:'purple'},
-            {label:'PMI ECO 2026',url:'https://www.pmi.org/-/media/pmi/documents/public/pdf/certifications/new-pmp-examination-content-outline-2026',color:''},
-            {label:'PMBOK Standards',url:'https://www.pmi.org/pmbok-guide-standards/foundational/pmbok',color:''},
-          ],
-          startHour:'14:00', endHour:'16:00'
-        },
-        {
-          id:`${dateStr}-review`,
-          type:'pmp',
-          time:'16:00 – 17:00',
-          title:'Ôn bài + Flashcard + LMS Atoha',
-          subtitle:'Consolidation — Ghi nhớ lại kiến thức đã học',
-          tag:'pmp',
-          target:'Làm bài tập ECO trên Atoha LMS + Cập nhật flashcard',
-          instruction:`🔁 Buổi consolidation:\n\n1️⃣ Xem lại ghi chép của buổi PMP vừa học\n2️⃣ Làm bài tập trên Atoha LMS (nếu có bài tương ứng)\n3️⃣ Cập nhật flashcard: Thêm 5 từ mới hôm nay\n4️⃣ Trả lời câu hỏi trong group Zalo lớp Atoha\n5️⃣ Self-check: Giải thích concept vừa học bằng tiếng Anh đơn giản (Feynman Technique)\n\n💡 Feynman Technique: Nếu không giải thích được bằng từ đơn giản = chưa thực sự hiểu → Đọc lại!`,
-          resources:[
-            {label:'Atoha LMS',url:'https://www.atoha.com/account',color:''},
-            {label:'Zalo Group',url:'https://zalo.me',color:''},
-            {label:'Quizlet Flashcard',url:'https://quizlet.com/subject/pmp/',color:''},
-          ],
-          startHour:'16:00', endHour:'17:00'
-        }
-      ];
-      bbcIdx++; engTopicIdx++; pmpTopicIdx++;
-    }
-    days.push(dayData);
   }
-  return days;
+
+  // HOLIDAY MODE
+  if (isHoliday) {
+    return {
+      type: 'holiday',
+      lessons: [
+        { id: `passive-${dateStr}`, type: 'passive', emoji: '🎧', title: 'Lắng Nghe Thụ Động (Ngày Lễ)', time: '7:00 – 7:30', target: 'Duy trì tiếp xúc tiếng Anh nhẹ nhàng', instruction: `Mở ${PASSIVE_TOPICS[passiveIdx]}. Không cần ghi chép nhiều, chỉ cần nghe và cảm nhận. Thư giãn!`, vocabKey: `vocab-${dateStr}-passive`, requireVocab: false },
+        { id: `holiday-eng-${dateStr}`, type: 'english', emoji: '📖', title: 'Đọc Tự Do Tiếng Anh (Nhẹ)', time: '10:00 – 11:00', target: 'Đọc 1-2 bài báo tiếng Anh về chủ đề bạn thích', instruction: 'Lên BBC.com hoặc The Guardian, chọn 1 bài về Business/Tech. Đọc, highlight 5-10 từ mới, lưu vào ô từ vựng.', vocabKey: `vocab-${dateStr}-eng`, requireVocab: true },
+        { id: `holiday-music-${dateStr}`, type: 'music', emoji: '🎵', title: 'English Music Relaxation (Ngày Lễ)', time: '15:00 – 16:00', target: `Ca khúc: ${MUSIC_SCHEDULE[musicIdx].song}`, instruction: `${MUSIC_SCHEDULE[musicIdx].tasks}. Hôm nay là ngày lễ, thưởng thức âm nhạc và học tiếng Anh vui vẻ!`, vocabKey: `vocab-${dateStr}-music`, requireVocab: true },
+      ]
+    };
+  }
+
+  // WEEKEND (Friday = 5, Saturday = 6)
+  if (dow === 5 || dow === 6) {
+    const dayLabel = dow === 5 ? 'Thứ Sáu' : 'Thứ Bảy';
+    return {
+      type: 'weekend',
+      lessons: [
+        { id: `passive-${dateStr}`, type: 'passive', emoji: '🎧', title: 'Lắng Nghe Thụ Động', time: '7:00 – 7:30', target: 'Warm-up não bộ nhẹ nhàng sáng sớm', instruction: `Mở: ${PASSIVE_TOPICS[passiveIdx]}. Nghe trong khi pha cà phê/ăn sáng. Không cần ghi chép.`, vocabKey: `vocab-${dateStr}-passive`, requireVocab: false },
+        { id: `eng-weekend-${dateStr}`, type: 'english', emoji: '📝', title: `${dayLabel} – English Practice Nhẹ`, time: '9:00 – 10:30', target: ENGLISH_SESSIONS[engIdx].focus, instruction: `${ENGLISH_SESSIONS[engIdx].tasks} Cuối tuần, hãy làm ở không gian thư giãn!`, vocabKey: `vocab-${dateStr}-eng`, requireVocab: true },
+        { id: `vocab-review-weekend-${dateStr}`, type: 'vocab', emoji: '🃏', title: 'Ôn Từ Vựng Tuần (Spaced Repetition)', time: '10:45 – 11:45', target: 'Ôn lại toàn bộ từ vựng tuần này', instruction: 'Dùng công cụ flashcard bên dưới để ôn lại tất cả từ đã học trong tuần. Mục tiêu: nhớ ≥80% số từ.', isVocabReview: true, vocabKey: `vocab-${dateStr}-review`, requireVocab: false },
+        { id: `pmp-light-${dateStr}`, type: 'pmp', emoji: '📚', title: `PMP Light Review – ${pmpPhase.domain}`, time: '14:00 – 16:00', target: `Ôn nhẹ: ${pmpPhase.topics[pmpTopicIdx] || pmpPhase.topics[0]}`, instruction: `Xem lại notes tuần này về "${pmpPhase.domain}". Làm 20 câu practice questions. Xem lại bất kỳ khái niệm nào còn mờ. Mở AI Trợ Lý để hỏi sâu!`, vocabKey: `vocab-${dateStr}-pmp`, requireVocab: true },
+        { id: `music-${dateStr}`, type: 'music', emoji: '🎵', title: 'English Music Relaxation', time: '17:00 – 17:30', target: `${MUSIC_SCHEDULE[musicIdx].song}`, instruction: `${MUSIC_SCHEDULE[musicIdx].tasks}. Focus hôm nay: ${MUSIC_SCHEDULE[musicIdx].focus}`, vocabKey: `vocab-${dateStr}-music`, requireVocab: true },
+      ]
+    };
+  }
+
+  // WEEKDAYS (Monday, Tuesday, Wednesday, Thursday)
+  const isLiveClassDay = dow === 2; // Tuesday
+
+  const lessons = [
+    {
+      id: `passive-${dateStr}`,
+      type: 'passive', emoji: '🎧',
+      title: 'Lắng Nghe Thụ Động Buổi Sáng',
+      time: '7:00 – 7:30',
+      target: 'Kích hoạt não tiếng Anh trước khi học chính thức',
+      instruction: `Bật: ${PASSIVE_TOPICS[passiveIdx]}. Nghe trong khi chuẩn bị ăn sáng, không cần tập trung hoàn toàn. Để tiếng Anh chảy vào tai tự nhiên.`,
+      vocabKey: `vocab-${dateStr}-passive`,
+      requireVocab: false
+    },
+    {
+      id: `english-${dateStr}`,
+      type: 'english', emoji: '✍️',
+      title: `Active English – ${ENGLISH_SESSIONS[engIdx].focus}`,
+      time: '9:00 – 10:30',
+      target: 'IELTS 6.5 Progress: +1 skill point',
+      instruction: `${ENGLISH_SESSIONS[engIdx].tasks} Ghi từ mới vào ô bên dưới!`,
+      vocabKey: `vocab-${dateStr}-eng`,
+      requireVocab: true
+    },
+    {
+      id: `vocab-${dateStr}`,
+      type: 'vocab', emoji: '🃏',
+      title: 'Ôn Từ Vựng (Spaced Repetition)',
+      time: '10:45 – 11:45',
+      target: 'Ôn lại từ vựng ngày hôm qua qua flashcard/mini-game',
+      instruction: 'Nhấn "BẮT ĐẦU" để mở hệ thống flashcard. Ôn từ vựng đã lưu ngày hôm qua. Mục tiêu: nhớ ít nhất 80%. Sau đó, học thêm 10 từ mới theo chủ đề PMP/IELTS.',
+      isVocabReview: true,
+      vocabKey: `vocab-${dateStr}-vocab-note`,
+      requireVocab: false
+    },
+    {
+      id: `pmp-${dateStr}`,
+      type: 'pmp', emoji: '📊',
+      title: `PMP Study – ${pmpPhase.domain}: ${pmpPhase.topics[pmpTopicIdx] || pmpPhase.topics[0]}`,
+      time: '14:00 – 17:00',
+      target: `Nắm vững: ${pmpPhase.topics[pmpTopicIdx] || pmpPhase.topics[0]}`,
+      instruction: `Đọc PMBOK/Atoha materials về "${pmpPhase.topics[pmpTopicIdx] || pmpPhase.topics[0]}". Làm 30 practice questions. Nghỉ 20 phút sau mỗi 60 phút học. Dùng AI Trợ Lý để hỏi sâu bất kỳ khái niệm nào!`,
+      vocabKey: `vocab-${dateStr}-pmp`,
+      requireVocab: true
+    },
+    {
+      id: `music-${dateStr}`,
+      type: 'music', emoji: '🎵',
+      title: 'English Music Relaxation',
+      time: '17:00 – 17:30',
+      target: `Ca khúc hôm nay: ${MUSIC_SCHEDULE[musicIdx].song}`,
+      instruction: `${MUSIC_SCHEDULE[musicIdx].tasks}. Chú ý: ${MUSIC_SCHEDULE[musicIdx].focus}. Đây là kết thúc buổi học chính – hãy thư giãn và tận hưởng!`,
+      vocabKey: `vocab-${dateStr}-music`,
+      requireVocab: true
+    },
+  ];
+
+  // ADD LIVE CLASS for Tuesday
+  if (isLiveClassDay) {
+    lessons.push({
+      id: `live-${dateStr}`,
+      type: 'live-class', emoji: '🔴',
+      title: 'LIVE CLASS – Atoha PMP',
+      time: '19:00 – 21:30',
+      target: `Buổi học trực tiếp Atoha: ${pmpPhase.domain} – ${pmpPhase.topics[pmpTopicIdx] || pmpPhase.topics[0]}`,
+      instruction: 'Vào lớp Zoom/Google Meet trước 15 phút. Chuẩn bị: notebook, notes từ buổi tự học. Ghi chép tích cực, đặt ít nhất 2 câu hỏi cho giảng viên. Sau lớp: viết 5-bullet recap ngay!',
+      vocabKey: `vocab-${dateStr}-live`,
+      requireVocab: true,
+      isLiveClass: true
+    });
+  }
+
+  return { type: isLiveClassDay ? 'live' : 'normal', lessons };
 }
 
-const ALL_DAYS = generateStudyDays();
-
-// Group by week
-function groupByWeek(days) {
-  const weeks = {};
-  days.forEach(d => {
-    if (!weeks[d.weekNum]) weeks[d.weekNum] = [];
-    weeks[d.weekNum].push(d);
-  });
-  return weeks;
+// =============================================
+// HELPER UTILITIES
+// =============================================
+function formatDateKey(date) {
+  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
 }
-const WEEKS = groupByWeek(ALL_DAYS);
-const WEEK_NUMS = Object.keys(WEEKS).map(Number).sort((a,b)=>a-b);
 
-// ── STATE ──
-let currentWeek = 1;
-let currentDateStr = '';
+function addDays(date, n) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + n);
+  return d;
+}
+
+function getDayIndex(date) {
+  const msPerDay = 24 * 60 * 60 * 1000;
+  return Math.round((date - START_DATE) / msPerDay);
+}
+
+function getDateFromIndex(idx) {
+  return addDays(START_DATE, idx);
+}
+
+function viDayName(dow) {
+  return ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'][dow];
+}
+
+function viMonthName(m) {
+  return ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'][m];
+}
+
+function formatViDate(date) {
+  return `${viDayName(date.getDay())}, ${date.getDate()} ${viMonthName(date.getMonth())} ${date.getFullYear()}`;
+}
+
+// =============================================
+// APP STATE
+// =============================================
+let currentDayIndex = 0;
+let currentWeekOffset = 0;
 let pomodoroInterval = null;
-let pomodoroSeconds = 25 * 60;
-let pomodoroIsRunning = false;
-let pomodoroIsBreak = false;
-let pomodoroSessionCount = 0;
-let pomodoroTotalDone = 0;
-let pomoCurrentLesson = '';
+let pomoDuration = 25 * 60;
+let pomoRemaining = 25 * 60;
+let pomoRunning = false;
+let pomoPhase = 'work'; // 'work' | 'break'
+let pomoSessions = 0;
+let currentPomoLessonId = '';
 
-function getTodayStr() {
-  const now = new Date();
-  return now.toISOString().split('T')[0];
+let vocabWords = []; // {word, context, dateKey, lessonId}
+let fcIndex = 0;
+let fcKnown = 0;
+let fcUnknown = 0;
+let fcWords = [];
+let quizIdx = 0;
+let quizScore = 0;
+
+// =============================================
+// LOCALSTORAGE HELPERS
+// =============================================
+function lsGet(key, def = null) {
+  try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : def; } catch { return def; }
+}
+function lsSet(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
 }
 
-function getLS(key) { try { return localStorage.getItem(key); } catch(e) { return null; } }
-function setLS(key, val) { try { localStorage.setItem(key, val); } catch(e) {} }
-
-function getLessonStatus(lessonId) { return getLS('status_'+lessonId) || 'pending'; }
-function setLessonStatus(lessonId, status) { setLS('status_'+lessonId, status); }
-function getLessonNote(lessonId) { return getLS('note_'+lessonId) || ''; }
-function setLessonNote(lessonId, note) { setLS('note_'+lessonId, note); }
-
-// ── LIVE CLOCK ──
-function updateClock() {
-  const now = new Date();
-  const options = { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' };
-  document.getElementById('liveDateTime').textContent = now.toLocaleDateString('vi-VN', options);
+function getAttendance(lessonId) {
+  return lsGet(`att_${lessonId}`, 'todo');
 }
-setInterval(updateClock, 1000);
-updateClock();
-
-// ── QUOTE ──
-function setDailyQuote() {
-  const today = new Date();
-  const idx = (today.getDate() + today.getMonth()) % QUOTES.length;
-  const q = QUOTES[idx];
-  document.getElementById('dailyQuote').textContent = `"${q.text}"`;
-  document.querySelector('.quote-author').textContent = `— ${q.author}`;
-}
-setDailyQuote();
-
-// ── DASHBOARD STATS ──
-function updateDashboard() {
-  const todayStr = getTodayStr();
-  const studyStart = new Date('2026-06-02');
-  const today = new Date();
-  const dayDiff = Math.floor((today - studyStart) / (1000*60*60*24)) + 1;
-  document.getElementById('studyDayNum').textContent = Math.max(1, dayDiff);
-
-  // Count all lessons
-  let totalLessons = 0, doneLessons = 0, missedLessons = 0;
-  ALL_DAYS.forEach(day => {
-    day.lessons.forEach(l => {
-      totalLessons++;
-      const s = getLessonStatus(l.id);
-      if (s === 'done') doneLessons++;
-      if (s === 'missed') missedLessons++;
-    });
-  });
-
-  document.getElementById('totalDone').textContent = doneLessons;
-  const pct = totalLessons > 0 ? Math.round(doneLessons/totalLessons*100) : 0;
-  document.getElementById('overallPct').textContent = pct + '%';
-  document.getElementById('totalSubtext').textContent = doneLessons === 0 ? 'Bắt đầu ngay hôm nay! 🚀' : `${doneLessons}/${totalLessons} tiết — Tiếp tục cố lên! 💪`;
-
-  // Week progress
-  const weekDays = WEEKS[currentWeek] || [];
-  let wTotal=0, wDone=0;
-  weekDays.forEach(day => {
-    day.lessons.forEach(l => {
-      wTotal++;
-      if (getLessonStatus(l.id) === 'done') wDone++;
-    });
-  });
-  const wPct = wTotal > 0 ? Math.round(wDone/wTotal*100) : 0;
-  document.getElementById('weekProgressVal').textContent = wPct + '%';
-  document.getElementById('weekProgressFrac').textContent = wDone+'/'+wTotal;
-  document.getElementById('weekProgressBar').style.width = wPct + '%';
-
-  // Overall multibar
-  const bar = document.getElementById('progMultibar');
-  const doneW = totalLessons > 0 ? (doneLessons/totalLessons*100).toFixed(1) : 0;
-  const missW = totalLessons > 0 ? (missedLessons/totalLessons*100).toFixed(1) : 0;
-  const todoW = 100 - parseFloat(doneW) - parseFloat(missW);
-  bar.innerHTML = `<div class="prog-seg done" style="width:${doneW}%"></div><div class="prog-seg missed" style="width:${missW}%"></div><div class="prog-seg todo" style="width:${Math.max(0,todoW)}%"></div>`;
+function setAttendance(lessonId, status) {
+  lsSet(`att_${lessonId}`, status);
 }
 
-// ── WEEK TABS ──
-function renderWeekTabs() {
-  const container = document.getElementById('weekTabsContainer');
-  container.innerHTML = '';
-  const todayStr = getTodayStr();
-
-  WEEK_NUMS.forEach(wn => {
-    const days = WEEKS[wn];
-    const firstDay = days[0];
-    const lastDay = days[days.length-1];
-    const fd = new Date(firstDay.date);
-    const ld = new Date(lastDay.date);
-    const label = `T${wn} (${fd.getDate()}/${fd.getMonth()+1}–${ld.getDate()}/${ld.getMonth()+1})`;
-    const hasToday = days.some(d => d.date === todayStr);
-    const hasClass = days.some(d => d.isClassDay);
-    const isHoliday = days.every(d => d.isHoliday);
-    const btn = document.createElement('button');
-    btn.className = 'week-tab' + (wn===currentWeek?' active':'') + (hasToday?' today-tab':'') + (isHoliday?' holiday-tab':'') + (hasClass&&!isHoliday?' class-tab':'');
-    btn.textContent = label;
-    btn.onclick = () => { currentWeek = wn; renderAll(); };
-    container.appendChild(btn);
-  });
-
-  document.getElementById('weekNavLabel').textContent = `Tuần ${currentWeek}`;
+function getVocab(vocabKey) {
+  return lsGet(`vcb_${vocabKey}`, '');
+}
+function setVocab(vocabKey, val) {
+  lsSet(`vcb_${vocabKey}`, val);
+  rebuildVocabBank();
 }
 
-// ── WEEK OVERVIEW GRID ──
-function renderWeekOverview() {
-  const grid = document.getElementById('weekOverviewGrid');
-  grid.innerHTML = '';
-  const days = WEEKS[currentWeek] || [];
-  const todayStr = getTodayStr();
-
-  // Fill 5 weekday slots
-  const dayNames = ['T2','T3','T4','T5','T6'];
-  let dayIdx = 0;
-
-  // Find what weekday the first day of this week is
-  days.forEach(day => {
-    const d = new Date(day.date);
-    const dow = d.getDay(); // 1=Mon, 2=Tue...5=Fri
-    const displayDow = dow - 1; // 0=Mon
-    const cell = document.createElement('div');
-    cell.className = 'wog-cell' + (day.date === currentDateStr ? ' active' : '');
-    const isToday = day.date === todayStr;
-    
-    let statusClass = '';
-    const allLessons = day.lessons;
-    const allDone = allLessons.length > 0 && allLessons.every(l => getLessonStatus(l.id) === 'done');
-    const anyMissed = allLessons.some(l => getLessonStatus(l.id) === 'missed');
-    
-    if (day.isHoliday) statusClass = 'holiday';
-    else if (day.isClassDay) statusClass = 'class';
-    else if (isToday) statusClass = 'today';
-    else if (allDone) statusClass = 'done';
-    else if (anyMissed) statusClass = 'missed';
-
-    cell.innerHTML = `<div class="wog-day-name">${['CN','T2','T3','T4','T5','T6','T7'][d.getDay()]}</div><div class="wog-day-num">${d.getDate()}/${d.getMonth()+1}</div><div class="wog-day-status ${statusClass}"></div>`;
-    cell.onclick = () => { currentDateStr = day.date; renderDayView(); renderWeekOverview(); };
-    grid.appendChild(cell);
-    dayIdx++;
-  });
+function getAllVocabWords() {
+  return lsGet('vocab_bank', []);
+}
+function setVocabBank(words) {
+  lsSet('vocab_bank', words);
 }
 
-// ── DAY VIEW ──
-function renderDayView() {
-  const container = document.getElementById('dayView');
-  if (!currentDateStr) {
-    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">Chọn một ngày để xem lịch học</div>';
-    return;
-  }
-
-  const day = ALL_DAYS.find(d => d.date === currentDateStr);
-  if (!day) { container.innerHTML = ''; return; }
-
-  const d = new Date(day.date);
-  const dayNames = ['Chủ nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
-  const months = ['tháng 1','tháng 2','tháng 3','tháng 4','tháng 5','tháng 6','tháng 7','tháng 8','tháng 9','tháng 10','tháng 11','tháng 12'];
-
-  let badgeClass = 'badge-normal', badgeText = 'Tự học';
-  if (day.isHoliday) { badgeClass='badge-holiday'; badgeText='🎉 Ngày Nghỉ Lễ'; }
-  else if (day.isClassDay) { badgeClass='badge-class'; badgeText='📡 Buổi Học Atoha'; }
-
-  // Count done for this day
-  const dayDone = day.lessons.filter(l => getLessonStatus(l.id)==='done').length;
-  const dayTotal = day.lessons.length;
-
-  let html = `<div class="day-header">
-    <div>
-      <div class="day-title">${dayNames[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}</div>
-      <div class="day-sub">Ngày học thứ ${day.dayNum} • Tuần ${day.weekNum} • ${day.isClassDay?'Buổi học Atoha 19:00':'Tự học'}</div>
-    </div>
-    <div class="day-badge ${badgeClass}">${badgeText}</div>
-    <div class="day-progress-mini">${dayDone}/${dayTotal} tiết hoàn thành</div>
-  </div>`;
-
-  if (day.isHoliday) {
-    html += `<div class="holiday-notice">
-      <div class="h-title">🎉 Ngày nghỉ lễ công ty</div>
-      <div class="h-desc">Hôm nay là ngày nghỉ lễ. Lịch học rất nhẹ — bạn không cần học bài bắt buộc!</div>
-      <div class="h-tip">💡 Gợi ý học thụ động (tùy chọn):<br>• Nghe BBC 6 Minute English khi đi chơi hoặc nghỉ ngơi<br>• Xem lại flashcard PMP 15-20 phút<br>• Đọc nhẹ 1 article tiếng Anh về project management<br>• Nghỉ ngơi và nạp năng lượng là quan trọng nhất! 🔋</div>
-    </div>`;
-  }
-
-  html += '<div class="lessons-grid">';
-
-  day.lessons.forEach(lesson => {
-    const status = getLessonStatus(lesson.id);
-    const note = getLessonNote(lesson.id);
-    const dotClass = {english:'dot-english',pmp:'dot-pmp',passive:'dot-passive',class:'dot-class',free:'dot-free'}[lesson.type] || 'dot-pmp';
-    const instClass = {english:'english-inst',passive:'passive-inst',class:'class-inst',free:'free-inst'}[lesson.type] || '';
-    const statusClass = status === 'missed' ? ' status-missed' : (status === 'done' ? ' status-done' : '');
-    const tagClass = {english:'tag-en',pmp:'tag-pmp',passive:'tag-passive',class:'tag-class',free:'tag-break'}[lesson.type] || 'tag-pmp';
-    const tagLabel = {english:'IELTS',pmp:'PMP',passive:'Thụ Động',class:'Lớp Atoha',free:'Nghỉ'}[lesson.type] || 'PMP';
-
-    // Google Calendar link
-    const gcalTitle = encodeURIComponent(`[Bean Study] ${lesson.title}`);
-    const gcalDesc = encodeURIComponent(`Target: ${lesson.target}\n\nNotebookLM AI: https://notebooklm.google.com/notebook/a63cf3d6-4be7-45fe-8e5a-1b8a44cb036c`);
-    const gcalDate = lesson.id.split('-passive')[0].split('-english')[0].split('-pmp')[0].split('-class')[0].split('-break')[0].split('-review')[0].split('-rest')[0].split('-prep')[0].replace(/(-passive|-english|-pmp-afternoon|-class|-break1|-review|-rest|-prep).*$/,'');
-    const cleanDate = lesson.id.split('-').slice(0,3).join('-');
-    const gcalLink = makeGCalLink(`[Bean] ${lesson.title}`, cleanDate, lesson.startHour||'09:00', lesson.endHour||'10:00', `Target: ${lesson.target}`);
-
-    // Status select
-    const optPending = status==='pending'?'selected':'';
-    const optDone = status==='done'?'selected':'';
-    const optMissed = status==='missed'?'selected':'';
-    const statusSelClass = status==='done'?' done':status==='missed'?' missed':'';
-
-    // Missed warning
-    const missedWarn = status==='missed' ? `<div class="missed-warning show"><span>⚠️</span> Buổi này đã bị bỏ lỡ! Đã được thêm vào Lớp Học Bù bên dưới.</div>` : '';
-
-    // Resources
-    let resHtml = '';
-    if (lesson.resources && lesson.resources.length > 0) {
-      resHtml = `<div class="resource-links"><span class="resource-label">Tài liệu:</span>`;
-      lesson.resources.forEach(r => {
-        resHtml += `<a class="res-link ${r.color}" href="${r.url}" target="_blank" rel="noopener">🔗 ${r.label}</a>`;
-      });
-      resHtml += `</div>`;
-    }
-
-    // Instruction with line breaks
-    const instFormatted = (lesson.instruction||'').replace(/\n/g,'<br>');
-
-    html += `<div class="lesson-card${statusClass}" id="card-${lesson.id}">
-      <div class="lesson-card-header" onclick="toggleCard('${lesson.id}')">
-        <div class="lesson-type-dot ${dotClass}"></div>
-        <div class="lesson-time">${lesson.time}</div>
-        <div class="lesson-title">
-          <span class="tag ${tagClass}">${tagLabel}</span>
-          ${lesson.title}
-          <span class="lesson-subtitle">${lesson.subtitle}</span>
-        </div>
-        <select class="lesson-status-sel${statusSelClass}" onclick="event.stopPropagation()" onchange="changeStatus('${lesson.id}', this.value, this)">
-          <option value="pending" ${optPending}>⬜ Chưa học</option>
-          <option value="done" ${optDone}>✅ Hoàn thành</option>
-          <option value="missed" ${optMissed}>❌ Bỏ lỡ</option>
-        </select>
-        <button class="lesson-toggle-btn" id="toggle-${lesson.id}">▼</button>
-      </div>
-      <div class="lesson-card-body" id="body-${lesson.id}">
-        <div class="lesson-meta-row">
-          <div class="meta-item"><div class="meta-label">Mục tiêu</div><div class="meta-val">${lesson.target||''}</div></div>
-        </div>
-        <div class="lesson-instruction ${instClass}">${instFormatted}</div>
-        ${resHtml}
-        ${missedWarn}
-        <div class="card-actions">
-          ${lesson.type!=='free'?`<button class="btn-pomodoro" onclick="openPomodoro('${lesson.id}', '${lesson.title.replace(/'/g,"\\'")}')">⏱ Bắt đầu Pomodoro</button>`:''}
-          <a class="btn-gcal" href="${gcalLink}" target="_blank" rel="noopener">📅 Thêm Google Calendar</a>
-        </div>
-        <div class="note-section">
-          <div class="note-label">📝 Ghi chú cá nhân</div>
-          <textarea class="note-textarea" id="note-${lesson.id}" placeholder="Ghi lại điều bạn đã học, câu hỏi còn thắc mắc, hoặc từ vựng mới...">${note}</textarea>
-          <button class="note-save-btn" id="notebtn-${lesson.id}" onclick="saveNote('${lesson.id}')">Lưu ghi chú</button>
-        </div>
-      </div>
-    </div>`;
-  });
-
-  html += '</div>';
-  container.innerHTML = html;
-  updateMakeupQueue();
+function getPomodoroSessions() {
+  const today = formatDateKey(new Date());
+  return lsGet(`pomo_${today}`, 0);
+}
+function incPomodoroSessions() {
+  const today = formatDateKey(new Date());
+  lsSet(`pomo_${today}`, getPomodoroSessions() + 1);
+  updatePomoSessionDisplay();
 }
 
-function toggleCard(id) {
-  const body = document.getElementById('body-'+id);
-  const btn = document.getElementById('toggle-'+id);
-  if (body.classList.contains('open')) {
-    body.classList.remove('open');
-    btn.classList.remove('open');
-  } else {
-    body.classList.add('open');
-    btn.classList.add('open');
-  }
-}
-
-function changeStatus(lessonId, newStatus, sel) {
-  setLessonStatus(lessonId, newStatus);
-  sel.className = 'lesson-status-sel' + (newStatus==='done'?' done':newStatus==='missed'?' missed':'');
-  const card = document.getElementById('card-'+lessonId);
-  if (card) {
-    card.className = 'lesson-card' + (newStatus==='missed'?' status-missed':newStatus==='done'?' status-done':'');
-  }
-  // Show/hide warning
-  const warn = card?.querySelector('.missed-warning');
-  if (warn) {
-    warn.className = 'missed-warning' + (newStatus==='missed'?' show':'');
-  }
-  updateMakeupQueue();
-  updateDashboard();
-  showToast(newStatus==='done'?'✅ Hoàn thành! Tuyệt vời!':newStatus==='missed'?'⚠️ Đã thêm vào lớp học bù.':'Cập nhật trạng thái!');
-}
-
-function saveNote(lessonId) {
-  const ta = document.getElementById('note-'+lessonId);
-  if (ta) {
-    setLessonNote(lessonId, ta.value);
-    const btn = document.getElementById('notebtn-'+lessonId);
-    if (btn) { btn.className='note-save-btn saved'; btn.textContent='✓ Đã lưu!'; setTimeout(()=>{ btn.className='note-save-btn'; btn.textContent='Lưu ghi chú'; },2000); }
-    showToast('📝 Đã lưu ghi chú!');
-  }
-}
-
-// ── MAKEUP QUEUE ──
-function updateMakeupQueue() {
-  const queue = document.getElementById('makeupQueue');
-  const list = document.getElementById('makeupList');
-  const missedItems = [];
-
-  ALL_DAYS.forEach(day => {
-    day.lessons.forEach(lesson => {
-      if (getLessonStatus(lesson.id) === 'missed') {
-        const d = new Date(day.date);
-        missedItems.push({ day: `${d.getDate()}/${d.getMonth()+1}`, title: lesson.title, id: lesson.id });
+// =============================================
+// VOCAB BANK MANAGEMENT
+// =============================================
+function rebuildVocabBank() {
+  // Collect all saved vocab from localStorage
+  const bank = [];
+  const prefix = 'vcb_vocab-';
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('vcb_vocab-')) {
+      const val = lsGet(key, '');
+      if (val && val.trim()) {
+        const dateKey = key.replace('vcb_vocab-', '').replace(/-eng$|-pmp$|-passive$|-vocab-note$|-music$|-live$|-review$/, '');
+        const words = val.split('\n').filter(w => w.trim());
+        words.forEach(w => {
+          if (w.trim()) bank.push({ word: w.trim(), dateKey, fullKey: key.replace('vcb_','') });
+        });
       }
-    });
-  });
+    }
+  }
+  setVocabBank(bank);
+  updateVocabStat();
+}
 
-  if (missedItems.length === 0) {
-    queue.className = 'makeup-queue';
+function getYesterdayVocab() {
+  const bank = getAllVocabWords();
+  const today = new Date();
+  const yesterday = formatDateKey(addDays(today, -1));
+  return bank.filter(w => w.dateKey === yesterday || w.dateKey.startsWith(yesterday));
+}
+
+function updateVocabStat() {
+  const count = getAllVocabWords().length;
+  const el = document.getElementById('stat-vocab');
+  if (el) el.textContent = count;
+}
+
+// =============================================
+// MAKEUP QUEUE MANAGEMENT
+// =============================================
+function getMakeupQueue() {
+  return lsGet('makeup_queue', []);
+}
+function saveMakeupQueue(q) {
+  lsSet('makeup_queue', q);
+}
+function addToMakeup(lesson, dayLabel) {
+  const q = getMakeupQueue();
+  if (!q.find(x => x.lessonId === lesson.id)) {
+    q.push({ lessonId: lesson.id, title: lesson.title, time: lesson.time, dayLabel, addedAt: new Date().toISOString() });
+    saveMakeupQueue(q);
+  }
+  renderMakeupQueue();
+}
+function removeFromMakeup(lessonId) {
+  const q = getMakeupQueue().filter(x => x.lessonId !== lessonId);
+  saveMakeupQueue(q);
+  renderMakeupQueue();
+}
+
+function renderMakeupQueue() {
+  const q = getMakeupQueue();
+  const section = document.getElementById('makeup-section');
+  const container = document.getElementById('makeup-queue');
+  const badge = document.getElementById('makeup-count-badge');
+  if (!section || !container) return;
+
+  if (q.length === 0) {
+    section.classList.add('hidden');
     return;
   }
+  section.classList.remove('hidden');
+  badge.textContent = q.length;
 
-  queue.className = 'makeup-queue has-items';
-  list.innerHTML = missedItems.map(item => `
-    <div class="makeup-item" id="makeup-${item.id}">
-      <div class="makeup-day">${item.day}</div>
-      <div class="makeup-lesson">❌ ${item.title}</div>
-      <button class="makeup-clear-btn" onclick="clearMakeup('${item.id}')" title="Đánh dấu đã học bù">✓ Học bù xong</button>
+  container.innerHTML = q.map(item => `
+    <div class="makeup-item flex items-center justify-between gap-4">
+      <div class="flex-1">
+        <div class="font-medium text-sm" style="color:var(--text-primary);">${item.title}</div>
+        <div class="text-xs mt-0.5" style="color:var(--text-muted);">${item.dayLabel} · ${item.time}</div>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="startMakeupSession('${item.lessonId}')" class="text-xs px-3 py-1.5 rounded-lg" style="background:rgba(56,139,253,.1);border:1px solid rgba(56,139,253,.3);color:var(--blue-accent);">▶ Học bù</button>
+        <button onclick="completeMakeup('${item.lessonId}')" class="text-xs px-3 py-1.5 rounded-lg" style="background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.3);color:var(--green-accent);">✓ Xong</button>
+      </div>
     </div>
   `).join('');
 }
 
-function clearMakeup(lessonId) {
-  setLessonStatus(lessonId, 'done');
-  updateMakeupQueue();
-  updateDashboard();
-  renderDayView();
-  showToast('✅ Đã hoàn thành học bù!');
+function startMakeupSession(lessonId) {
+  openPomodoro(lessonId, 'Học bù: ' + lessonId.split('-').slice(0,2).join(' '));
+}
+function completeMakeup(lessonId) {
+  setAttendance(lessonId, 'done');
+  removeFromMakeup(lessonId);
+  showToast('✅ Đã hoàn thành bài học bù!', 'success');
+  renderCurrentDay();
 }
 
-// ── POMODORO ──
-const CIRC = 2 * Math.PI * 80;
-function openPomodoro(lessonId, lessonName) {
-  pomoCurrentLesson = lessonName;
-  document.getElementById('pomoLessonName').textContent = lessonName;
-  document.getElementById('pomoOverlay').className = 'pomo-overlay open';
-  pomodoroReset();
+// =============================================
+// RENDER ENGINE
+// =============================================
+function getCurrentWeekDays() {
+  const today = new Date();
+  const todayIndex = getDayIndex(today);
+  // Show current week aligned to Mon-Sun
+  const weekStart = currentWeekOffset * 7;
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const idx = weekStart + i;
+    const d = getDateFromIndex(idx);
+    days.push({ index: idx, date: d, dow: d.getDay() });
+  }
+  return days;
 }
-function pomodoroClose() {
-  document.getElementById('pomoOverlay').className = 'pomo-overlay';
-  if (pomodoroInterval) { clearInterval(pomodoroInterval); pomodoroInterval = null; }
-  pomodoroIsRunning = false;
+
+function renderDayNav() {
+  const container = document.getElementById('day-nav-buttons');
+  const weekLabel = document.getElementById('week-label');
+  if (!container) return;
+
+  const days = getCurrentWeekDays();
+  const today = new Date();
+  const todayIdx = getDayIndex(today);
+  const weekNum = currentWeekOffset + 1;
+  if (weekLabel) weekLabel.textContent = `Tuần ${weekNum}`;
+
+  const dayNames = ['CN','T2','T3','T4','T5','T6','T7'];
+  container.innerHTML = days.map(({ index, date, dow }) => {
+    const dateStr = formatDateKey(date);
+    const isToday = index === todayIdx;
+    const isCurrent = index === currentDayIndex;
+    const isHoliday = HOLIDAYS.includes(dateStr);
+    const isWeekend = dow === 5 || dow === 6;
+    const isSunday = dow === 0;
+
+    let cls = 'day-btn';
+    if (isCurrent) cls += ' active';
+    if (isToday) cls += ' today';
+    if (isHoliday) cls += ' holiday';
+    else if (isWeekend && !isSunday) cls += ' weekend';
+
+    const holidayMark = isHoliday ? ' 🏖️' : '';
+    const sundayMark = isSunday ? ' 😴' : '';
+    const todayMark = isToday ? ' •' : '';
+
+    return `<button class="${cls}" onclick="goToDay(${index})">
+      <div>${dayNames[dow]}${holidayMark}${sundayMark}${todayMark}</div>
+      <div class="text-xs opacity-70">${date.getDate()}/${date.getMonth()+1}</div>
+    </button>`;
+  }).join('');
 }
-function pomodoroReset() {
-  if (pomodoroInterval) { clearInterval(pomodoroInterval); pomodoroInterval = null; }
-  pomodoroIsRunning = false;
-  pomodoroIsBreak = false;
-  pomodoroSeconds = 25 * 60;
-  pomodoroSessionCount = 0;
-  document.getElementById('pomoBtnStart').textContent = '▶ Bắt đầu';
-  updatePomoDisplay();
+
+function renderCurrentDay() {
+  const date = getDateFromIndex(currentDayIndex);
+  const dateStr = formatDateKey(date);
+  const dayIndex = currentDayIndex;
+  const schedule = buildDaySchedule(date, dayIndex);
+  const isHoliday = HOLIDAYS.includes(dateStr);
+  const todayIdx = getDayIndex(new Date());
+
+  // Header
+  const titleEl = document.getElementById('day-title');
+  const subtitleEl = document.getElementById('day-subtitle');
+  const emojiEl = document.getElementById('day-emoji');
+  const holidayBadge = document.getElementById('holiday-badge');
+  const currentDateDisplay = document.getElementById('current-date-display');
+  const headerDate = document.getElementById('header-date');
+
+  if (currentDateDisplay) currentDateDisplay.textContent = formatViDate(date);
+  if (headerDate) headerDate.textContent = formatViDate(new Date());
+
+  const weekNum = Math.floor(dayIndex / 7) + 1;
+  const pmpPhase = PMP_CURRICULUM[Math.min(weekNum - 1, PMP_CURRICULUM.length - 1)];
+
+  if (titleEl) titleEl.textContent = formatViDate(date);
+  if (subtitleEl) subtitleEl.textContent = `Tuần ${weekNum} · ${pmpPhase.domain}`;
+  if (holidayBadge) {
+    holidayBadge.classList.toggle('hidden', !isHoliday);
+  }
+
+  const emojis = { off: '😴', holiday: '🏖️', weekend: '🌤️', live: '🔴', normal: '📚' };
+  if (emojiEl) emojiEl.textContent = emojis[schedule.type] || '📅';
+
+  // PMP Phase display
+  renderPMPPhase(pmpPhase, dayIndex);
+
+  // Lesson cards
+  renderLessonCards(schedule.lessons, date, dayIndex);
+
+  // Stats
+  updateDayStats(schedule.lessons);
+  updateWeekStats();
+  updateStatDay();
+
+  // Makeup queue
+  renderMakeupQueue();
+
+  // Quote
+  renderQuote(dayIndex);
 }
-function pomodoroToggle() {
-  if (pomodoroIsRunning) {
-    clearInterval(pomodoroInterval);
-    pomodoroIsRunning = false;
-    document.getElementById('pomoBtnStart').textContent = '▶ Tiếp tục';
-  } else {
-    pomodoroIsRunning = true;
-    document.getElementById('pomoBtnStart').textContent = '⏸ Tạm dừng';
-    pomodoroInterval = setInterval(() => {
-      pomodoroSeconds--;
-      if (pomodoroSeconds < 0) {
-        if (!pomodoroIsBreak) {
-          pomodoroTotalDone++;
-          pomodoroIsBreak = true;
-          pomodoroSeconds = 5 * 60;
-          pomodoroSessionCount++;
-          showToast('🍅 Hoàn thành 1 Pomodoro! Nghỉ 5 phút.');
-        } else {
-          pomodoroIsBreak = false;
-          pomodoroSeconds = 25 * 60;
-          showToast('💪 Nghỉ xong! Bắt đầu Pomodoro mới!');
+
+function renderPMPPhase(phase, dayIndex) {
+  const el = document.getElementById('pmp-phase-display');
+  if (!el) return;
+  el.innerHTML = PMP_CURRICULUM.slice(0, 5).map((p, i) => {
+    const currentWeek = Math.floor(dayIndex / 7);
+    const isDone = i < currentWeek;
+    const isCurrent = i === currentWeek;
+    return `<div class="flex items-center gap-2 text-xs">
+      <span>${isDone ? '✅' : isCurrent ? '▶' : '○'}</span>
+      <span style="color:${isCurrent ? p.color : isDone ? 'var(--green-accent)' : 'var(--text-muted)'};font-weight:${isCurrent?'600':'400'}">
+        ${p.icon} ${p.domain}
+      </span>
+    </div>`;
+  }).join('');
+
+  const progressPct = Math.min(Math.round((Math.floor(dayIndex/7) / PMP_CURRICULUM.length) * 100), 100);
+  const pmpBar = document.getElementById('pmp-progress-bar');
+  const pmpLabel = document.getElementById('pmp-progress-label');
+  if (pmpBar) pmpBar.style.width = progressPct + '%';
+  if (pmpLabel) pmpLabel.textContent = `${progressPct}% · ${Math.floor(dayIndex/7)+1}/${PMP_CURRICULUM.length} Modules`;
+}
+
+function renderLessonCards(lessons, date, dayIndex) {
+  const container = document.getElementById('lesson-cards-container');
+  if (!container) return;
+
+  container.innerHTML = lessons.map(lesson => {
+    const att = getAttendance(lesson.id);
+    const vocabVal = lesson.vocabKey ? getVocab(lesson.vocabKey) : '';
+    const isMissed = att === 'missed';
+    const isDone = att === 'done';
+    const isOff = lesson.isOff;
+
+    let cardClass = `card lesson-card ${lesson.type} p-5 relative`;
+    if (isMissed) cardClass += ' missed-card';
+    if (isDone) cardClass += ' completed-card';
+
+    const statusOptions = [
+      { val: 'todo', label: 'Chưa học', icon: '○' },
+      { val: 'done', label: 'Hoàn thành', icon: '✓' },
+      { val: 'missed', label: 'Bỏ lỡ', icon: '✗' },
+    ];
+
+    const typeColors = {
+      passive: 'var(--text-muted)', english: 'var(--blue-accent)', vocab: 'var(--green-accent)',
+      pmp: 'var(--purple-accent)', music: 'var(--amber-accent)', 'live-class': '#ff6b6b'
+    };
+
+    const badgeClass = att === 'done' ? 'badge-done' : att === 'missed' ? 'badge-missed' : 'badge-todo';
+
+    const vocabSection = lesson.requireVocab && lesson.vocabKey ? `
+      <div class="mt-4 pt-4" style="border-top:1px solid var(--border);">
+        <label class="text-xs font-medium block mb-2" style="color:var(--text-muted);">📝 Ghi chú Từ vựng (mỗi từ 1 dòng):</label>
+        <textarea class="vocab-textarea" id="vt-${lesson.vocabKey}"
+          placeholder="Ví dụ:&#10;stakeholder - người có liên quan&#10;milestone - cột mốc quan trọng&#10;deliverable - sản phẩm bàn giao"
+          onchange="handleVocabChange('${lesson.vocabKey}', this.value)"
+          onblur="handleVocabChange('${lesson.vocabKey}', this.value)">${vocabVal}</textarea>
+      </div>
+    ` : '';
+
+    const actionBtn = isOff ? '' : lesson.isVocabReview ? `
+      <button onclick="showVocabGame()" class="text-xs px-4 py-2 rounded-lg font-semibold" style="background:rgba(56,139,253,.12);border:1px solid rgba(56,139,253,.3);color:var(--blue-accent);">
+        🃏 Mở Flashcard
+      </button>
+    ` : `
+      <button onclick="openPomodoro('${lesson.id}', '${escHtml(lesson.title)}')" class="text-xs px-4 py-2 rounded-lg font-semibold" style="background:var(--blue-accent);color:white;">
+        ▶ BẮT ĐẦU
+      </button>
+    `;
+
+    return `
+    <div class="${cardClass}" id="card-${lesson.id}">
+      ${HOLIDAYS.includes(formatDateKey(date)) && !lesson.isOff ? '<div class="holiday-overlay"></div>' : ''}
+      <div class="flex items-start justify-between gap-4 mb-3">
+        <div class="flex-1">
+          <div class="flex items-center gap-2 flex-wrap mb-1">
+            <span class="text-lg">${lesson.emoji}</span>
+            <span class="font-syne font-bold text-base" style="color:var(--text-primary);">${lesson.title}</span>
+            ${lesson.isLiveClass ? '<span class="text-xs px-2 py-0.5 rounded-full font-bold" style="background:rgba(255,107,107,.15);color:#ff6b6b;border:1px solid rgba(255,107,107,.3);">🔴 LIVE</span>' : ''}
+          </div>
+          <div class="flex items-center gap-3 flex-wrap">
+            <span class="font-mono text-xs px-2 py-0.5 rounded" style="background:var(--bg-surface);color:${typeColors[lesson.type] || 'var(--text-muted)'};">⏰ ${lesson.time}</span>
+            <span class="text-xs px-2 py-0.5 rounded ${badgeClass}">
+              ${att === 'done' ? '✓ Hoàn thành' : att === 'missed' ? '✗ Bỏ lỡ' : '○ Chưa học'}
+            </span>
+          </div>
+        </div>
+        ${isOff ? '' : `
+        <div class="flex flex-col gap-1.5 min-w-[120px]">
+          ${statusOptions.map(s => `
+            <button onclick="handleAttendance('${lesson.id}', '${s.val}', event)"
+              class="text-xs px-2 py-1 rounded-lg text-left transition-all"
+              style="background:${att === s.val ? (s.val==='done'?'rgba(63,185,80,.2)':s.val==='missed'?'rgba(248,81,73,.2)':'rgba(139,148,158,.2)') : 'var(--bg-surface)'};
+                     border:1px solid ${att === s.val ? (s.val==='done'?'rgba(63,185,80,.5)':s.val==='missed'?'rgba(248,81,73,.5)':'rgba(139,148,158,.3)') : 'var(--border)'};
+                     color:${att === s.val ? (s.val==='done'?'var(--green-accent)':s.val==='missed'?'var(--red-accent)':'var(--text-primary)') : 'var(--text-muted)'};">
+              ${s.icon} ${s.label}
+            </button>
+          `).join('')}
+        </div>
+        `}
+      </div>
+      <div class="mb-3">
+        <div class="text-xs font-medium mb-1" style="color:${typeColors[lesson.type]};">🎯 Mục tiêu:</div>
+        <p class="text-sm" style="color:var(--text-secondary);">${lesson.target}</p>
+      </div>
+      <div class="mb-4">
+        <div class="text-xs font-medium mb-1" style="color:var(--text-muted);">📋 Hướng dẫn:</div>
+        <p class="text-sm leading-relaxed" style="color:var(--text-secondary);">${lesson.instruction}</p>
+      </div>
+      ${vocabSection}
+      <div class="mt-4 pt-3 flex items-center gap-3" style="border-top:1px solid var(--border);">
+        ${actionBtn}
+        ${lesson.isLiveClass ? `<a href="https://notebooklm.google.com/notebook/a63cf3d6-4be7-45fe-8e5a-1b8a44cb036c" target="_blank" class="text-xs px-4 py-2 rounded-lg" style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;">🤖 Hỏi AI</a>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Restore vocab textareas
+  lessons.forEach(lesson => {
+    if (lesson.vocabKey) {
+      const ta = document.getElementById(`vt-${lesson.vocabKey}`);
+      if (ta) ta.value = getVocab(lesson.vocabKey);
+    }
+  });
+}
+
+function escHtml(s) {
+  return s.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+// =============================================
+// ATTENDANCE HANDLER
+// =============================================
+function handleAttendance(lessonId, status, evt) {
+  evt && evt.stopPropagation();
+  const prev = getAttendance(lessonId);
+  setAttendance(lessonId, status);
+
+  const card = document.getElementById(`card-${lessonId}`);
+  if (card) {
+    card.classList.remove('missed-card', 'completed-card');
+    if (status === 'missed') {
+      card.classList.add('missed-card');
+      // Get lesson info for makeup
+      const date = getDateFromIndex(currentDayIndex);
+      const schedule = buildDaySchedule(date, currentDayIndex);
+      const lesson = schedule.lessons.find(l => l.id === lessonId);
+      if (lesson) addToMakeup(lesson, formatViDate(date));
+      showToast('⚠️ Đã thêm vào Lớp Học Bù!', 'warning');
+    } else if (status === 'done') {
+      card.classList.add('completed-card');
+      showToast('🎉 Tuyệt vời! Bài học hoàn thành!', 'success');
+      if (prev === 'missed') removeFromMakeup(lessonId);
+    } else {
+      if (prev === 'missed') removeFromMakeup(lessonId);
+    }
+  }
+
+  updateDayStats(null);
+  updateWeekStats();
+
+  // Re-render just the status buttons
+  const date = getDateFromIndex(currentDayIndex);
+  const schedule = buildDaySchedule(date, currentDayIndex);
+  renderLessonCards(schedule.lessons, date, currentDayIndex);
+}
+
+function markAllDone() {
+  const date = getDateFromIndex(currentDayIndex);
+  const schedule = buildDaySchedule(date, currentDayIndex);
+  schedule.lessons.forEach(l => { if (!l.isOff) setAttendance(l.id, 'done'); });
+  renderCurrentDay();
+  showToast('✅ Đánh dấu tất cả hoàn thành!', 'success');
+}
+
+// =============================================
+// STATS
+// =============================================
+function updateDayStats(lessons) {
+  if (!lessons) {
+    const date = getDateFromIndex(currentDayIndex);
+    const schedule = buildDaySchedule(date, currentDayIndex);
+    lessons = schedule.lessons;
+  }
+  const real = lessons.filter(l => !l.isOff);
+  const done = real.filter(l => getAttendance(l.id) === 'done').length;
+  const total = real.length;
+  const pct = total ? Math.round((done / total) * 100) : 0;
+
+  const bar = document.getElementById('day-progress-bar');
+  const label = document.getElementById('day-progress-label');
+  if (bar) bar.style.width = pct + '%';
+  if (label) label.textContent = `${done}/${total} bài`;
+
+  const doneEl = document.getElementById('stat-done');
+  const missedEl = document.getElementById('stat-missed');
+  if (doneEl) doneEl.textContent = done;
+  if (missedEl) missedEl.textContent = real.filter(l => getAttendance(l.id) === 'missed').length;
+}
+
+function updateWeekStats() {
+  const days = getCurrentWeekDays();
+  let totalLessons = 0, doneLessons = 0;
+  days.forEach(({ index, date }) => {
+    const schedule = buildDaySchedule(date, index);
+    const real = schedule.lessons.filter(l => !l.isOff);
+    totalLessons += real.length;
+    doneLessons += real.filter(l => getAttendance(l.id) === 'done').length;
+  });
+  const pct = totalLessons ? Math.round((doneLessons / totalLessons) * 100) : 0;
+  const bar = document.getElementById('week-progress');
+  const label = document.getElementById('week-progress-label');
+  if (bar) bar.style.width = pct + '%';
+  if (label) label.textContent = pct + '%';
+}
+
+function updateStatDay() {
+  const el = document.getElementById('stat-day');
+  if (el) el.textContent = currentDayIndex + 1;
+}
+
+function renderQuote(dayIndex) {
+  const q = document.getElementById('daily-quote');
+  if (q) q.textContent = PM_QUOTES[dayIndex % PM_QUOTES.length];
+}
+
+// =============================================
+// NAVIGATION
+// =============================================
+function goToDay(idx) {
+  currentDayIndex = Math.max(0, idx);
+  const weekOfDay = Math.floor(idx / 7);
+  currentWeekOffset = weekOfDay;
+  renderDayNav();
+  renderCurrentDay();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToToday() {
+  const today = new Date();
+  const idx = getDayIndex(today);
+  goToDay(Math.max(0, idx));
+}
+
+function navigateWeek(delta) {
+  currentWeekOffset = Math.max(0, currentWeekOffset + delta);
+  // Move currentDayIndex to the first day of the new week if it's out of range
+  const weekStart = currentWeekOffset * 7;
+  if (currentDayIndex < weekStart || currentDayIndex >= weekStart + 7) {
+    currentDayIndex = weekStart;
+  }
+  renderDayNav();
+  renderCurrentDay();
+}
+
+// =============================================
+// VOCABULARY HANDLERS
+// =============================================
+function handleVocabChange(vocabKey, val) {
+  setVocab(vocabKey, val);
+}
+
+function showVocabGame() {
+  const section = document.getElementById('vocab-game-section');
+  if (section) {
+    section.classList.remove('hidden');
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    initFlashcards();
+  }
+}
+
+function closeVocabGame() {
+  const section = document.getElementById('vocab-game-section');
+  if (section) section.classList.add('hidden');
+}
+
+function switchVocabTab(tab) {
+  ['flashcard', 'quiz', 'all'].forEach(t => {
+    const btn = document.getElementById(`tab-${t}`);
+    const panel = document.getElementById(`vocab-${t}-tab`);
+    if (btn) btn.classList.toggle('active', t === tab);
+    if (panel) panel.classList.toggle('hidden', t !== tab);
+  });
+  if (tab === 'all') renderAllWords();
+  if (tab === 'quiz') initQuiz();
+  if (tab === 'flashcard') initFlashcards();
+}
+
+function initFlashcards() {
+  const words = getYesterdayVocab();
+  const noMsg = document.getElementById('no-vocab-msg');
+  const fcArea = document.getElementById('flashcard-area');
+
+  if (words.length === 0) {
+    if (noMsg) noMsg.classList.remove('hidden');
+    if (fcArea) fcArea.classList.add('hidden');
+    return;
+  }
+  if (noMsg) noMsg.classList.add('hidden');
+  if (fcArea) fcArea.classList.remove('hidden');
+
+  fcWords = shuffle(words);
+  fcIndex = 0; fcKnown = 0; fcUnknown = 0;
+  updateFlashcardDisplay();
+}
+
+function updateFlashcardDisplay() {
+  const card = document.getElementById('current-flashcard');
+  const counter = document.getElementById('fc-counter');
+  const knownEl = document.getElementById('fc-known-count');
+  const unknownEl = document.getElementById('fc-unknown-count');
+
+  if (fcIndex >= fcWords.length) {
+    // Session complete
+    const fcFront = document.getElementById('fc-front');
+    const fcBack = document.getElementById('fc-back');
+    if (fcFront) fcFront.textContent = '🎉 Xong rồi!';
+    if (fcBack) fcBack.textContent = `Bạn đã nhớ ${fcKnown}/${fcWords.length} từ. Tuyệt vời!`;
+    if (counter) counter.textContent = `${fcIndex}/${fcWords.length}`;
+    return;
+  }
+
+  const w = fcWords[fcIndex];
+  const parts = w.word.split(' - ');
+  const front = parts[0] || w.word;
+  const back = parts.slice(1).join(' - ') || '(Xem lại ghi chú)';
+
+  if (card) card.classList.remove('flipped');
+  const fcFront = document.getElementById('fc-front');
+  const fcBack = document.getElementById('fc-back');
+  if (fcFront) fcFront.textContent = front;
+  if (fcBack) fcBack.textContent = back;
+  if (counter) counter.textContent = `${fcIndex + 1} / ${fcWords.length}`;
+  if (knownEl) knownEl.textContent = fcKnown;
+  if (unknownEl) unknownEl.textContent = fcUnknown;
+}
+
+function flipCard() {
+  const card = document.getElementById('current-flashcard');
+  if (card) card.classList.toggle('flipped');
+}
+
+function fcResult(known) {
+  if (known) fcKnown++; else fcUnknown++;
+  fcIndex++;
+  updateFlashcardDisplay();
+}
+
+function initQuiz() {
+  const words = getAllVocabWords();
+  if (words.length < 2) {
+    document.getElementById('quiz-area').innerHTML = '<div class="text-center py-10" style="color:var(--text-muted);">📭 Cần ít nhất 2 từ vựng để chơi quiz!</div>';
+    return;
+  }
+  quizIdx = 0;
+  renderQuizQuestion(words);
+}
+
+function renderQuizQuestion(words) {
+  if (!words) words = getAllVocabWords();
+  if (words.length < 2) return;
+
+  const idx = Math.floor(Math.random() * words.length);
+  const correct = words[idx];
+  const parts = correct.word.split(' - ');
+  const question = parts[0];
+  const answer = parts.slice(1).join(' - ') || correct.word;
+
+  // Get 3 wrong answers
+  const others = shuffle(words.filter((_, i) => i !== idx)).slice(0, 3);
+  const options = shuffle([answer, ...others.map(o => { const p = o.word.split(' - '); return p.slice(1).join(' - ') || o.word; })]);
+
+  const wordEl = document.getElementById('quiz-word');
+  const optionsEl = document.getElementById('quiz-options');
+  const feedback = document.getElementById('quiz-feedback');
+  if (wordEl) wordEl.textContent = question;
+  if (feedback) { feedback.classList.add('hidden'); }
+  if (optionsEl) {
+    optionsEl.innerHTML = options.map(opt => `
+      <button onclick="checkQuiz('${escHtml(opt)}', '${escHtml(answer)}', this)" 
+        class="text-sm py-3 px-4 rounded-xl text-center transition-all"
+        style="background:var(--bg-surface);border:1px solid var(--border);color:var(--text-primary);">
+        ${opt}
+      </button>
+    `).join('');
+  }
+}
+
+function checkQuiz(selected, correct, btn) {
+  const optionsEl = document.getElementById('quiz-options');
+  const feedback = document.getElementById('quiz-feedback');
+  const isCorrect = selected === correct;
+
+  if (btn) {
+    btn.style.background = isCorrect ? 'rgba(63,185,80,.2)' : 'rgba(248,81,73,.2)';
+    btn.style.borderColor = isCorrect ? 'var(--green-accent)' : 'var(--red-accent)';
+    btn.style.color = isCorrect ? 'var(--green-accent)' : 'var(--red-accent)';
+  }
+
+  if (optionsEl) {
+    optionsEl.querySelectorAll('button').forEach(b => b.disabled = true);
+    // Highlight correct answer if wrong
+    if (!isCorrect) {
+      optionsEl.querySelectorAll('button').forEach(b => {
+        if (b.textContent.trim() === correct) {
+          b.style.background = 'rgba(63,185,80,.2)';
+          b.style.borderColor = 'var(--green-accent)';
+          b.style.color = 'var(--green-accent)';
         }
-      }
+      });
+    }
+  }
+
+  if (feedback) {
+    feedback.textContent = isCorrect ? '🎉 Chính xác! Tiếp tục nào!' : `❌ Chưa đúng. Đáp án: ${correct}`;
+    feedback.style.color = isCorrect ? 'var(--green-accent)' : 'var(--red-accent)';
+    feedback.classList.remove('hidden');
+  }
+
+  setTimeout(() => renderQuizQuestion(), 1800);
+}
+
+function renderAllWords() {
+  const words = getAllVocabWords();
+  const container = document.getElementById('all-words-list');
+  const countEl = document.getElementById('all-words-count');
+  if (countEl) countEl.textContent = `${words.length} từ đã lưu`;
+  if (!container) return;
+  if (words.length === 0) {
+    container.innerHTML = '<p class="text-sm text-center py-6" style="color:var(--text-muted);">Chưa có từ nào. Hãy ghi chú từ vựng trong các bài học!</p>';
+    return;
+  }
+  container.innerHTML = words.map((w, i) => `
+    <div class="flex items-center justify-between gap-3 p-3 rounded-lg" style="background:var(--bg-surface);border:1px solid var(--border);">
+      <div class="flex-1">
+        <span class="text-xs font-mono mr-2" style="color:var(--text-muted);">${i+1}.</span>
+        <span class="text-sm" style="color:var(--text-primary);">${w.word}</span>
+      </div>
+      <span class="text-xs" style="color:var(--text-muted);">${w.dateKey}</span>
+    </div>
+  `).join('');
+}
+
+function clearAllVocab() {
+  if (!confirm('Xóa tất cả từ vựng đã lưu? Hành động này không thể hoàn tác!')) return;
+  // Remove all vocab keys
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith('vcb_')) keys.push(k); }
+  keys.forEach(k => localStorage.removeItem(k));
+  setVocabBank([]);
+  renderAllWords();
+  updateVocabStat();
+  showToast('🗑 Đã xóa tất cả từ vựng.', 'warning');
+}
+
+// =============================================
+// POMODORO TIMER
+// =============================================
+function openPomodoro(lessonId, lessonName) {
+  currentPomoLessonId = lessonId;
+  const nameEl = document.getElementById('pomo-lesson-name');
+  if (nameEl) nameEl.textContent = lessonName || 'Pomodoro';
+  const overlay = document.getElementById('pomodoro-overlay');
+  if (overlay) overlay.classList.add('active');
+  resetPomodoro();
+  updatePomoSessionDisplay();
+}
+
+function closePomodoro() {
+  const overlay = document.getElementById('pomodoro-overlay');
+  if (overlay) overlay.classList.remove('active');
+  if (pomodoroInterval) { clearInterval(pomodoroInterval); pomodoroInterval = null; }
+  pomoRunning = false;
+  const btn = document.getElementById('pomo-toggle-btn');
+  if (btn) btn.textContent = '▶ Bắt đầu';
+}
+
+function togglePomodoro() {
+  if (pomoRunning) {
+    clearInterval(pomodoroInterval);
+    pomodoroInterval = null;
+    pomoRunning = false;
+    const btn = document.getElementById('pomo-toggle-btn');
+    if (btn) btn.textContent = '▶ Tiếp tục';
+  } else {
+    pomoRunning = true;
+    const btn = document.getElementById('pomo-toggle-btn');
+    if (btn) btn.textContent = '⏸ Tạm dừng';
+    pomodoroInterval = setInterval(() => {
+      pomoRemaining--;
       updatePomoDisplay();
+      if (pomoRemaining <= 0) {
+        clearInterval(pomodoroInterval);
+        pomodoroInterval = null;
+        pomoRunning = false;
+        if (pomoPhase === 'work') {
+          pomoSessions++;
+          incPomodoroSessions();
+          pomoPhase = 'break';
+          pomoRemaining = 5 * 60;
+          pomoDuration = 5 * 60;
+          showToast('🍅 Nghỉ 5 phút! Uống nước, vươn vai!', 'success');
+        } else {
+          pomoPhase = 'work';
+          pomoRemaining = 25 * 60;
+          pomoDuration = 25 * 60;
+          showToast('⏰ Bắt đầu phiên học mới!', 'success');
+        }
+        const btn2 = document.getElementById('pomo-toggle-btn');
+        if (btn2) btn2.textContent = '▶ Bắt đầu';
+        updatePomoDisplay();
+      }
     }, 1000);
   }
 }
+
+function resetPomodoro() {
+  if (pomodoroInterval) { clearInterval(pomodoroInterval); pomodoroInterval = null; }
+  pomoRunning = false;
+  pomoPhase = 'work';
+  pomoRemaining = pomoDuration;
+  updatePomoDisplay();
+  const btn = document.getElementById('pomo-toggle-btn');
+  if (btn) btn.textContent = '▶ Bắt đầu';
+}
+
+function setPomoDuration(mins) {
+  pomoDuration = mins * 60;
+  pomoRemaining = pomoDuration;
+  pomoPhase = 'work';
+  if (pomodoroInterval) { clearInterval(pomodoroInterval); pomodoroInterval = null; }
+  pomoRunning = false;
+  updatePomoDisplay();
+  const btn = document.getElementById('pomo-toggle-btn');
+  if (btn) btn.textContent = '▶ Bắt đầu';
+}
+
 function updatePomoDisplay() {
-  const min = Math.floor(pomodoroSeconds / 60);
-  const sec = pomodoroSeconds % 60;
-  document.getElementById('pomoClock').textContent = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
-  const phase = document.getElementById('pomoPhase');
-  const circle = document.getElementById('pomoCircle');
-  const totalSec = pomodoroIsBreak ? 300 : 1500;
-  const pct = pomodoroSeconds / totalSec;
-  const offset = CIRC * (1 - pct);
-  circle.style.strokeDashoffset = offset;
-  if (pomodoroIsBreak) {
-    phase.textContent = 'NGHỈ GIẢI LAO';
-    phase.className = 'pomo-phase break';
-    circle.className = 'pomo-circle-prog break';
-  } else {
-    phase.textContent = 'TẬP TRUNG';
-    phase.className = 'pomo-phase work';
-    circle.className = 'pomo-circle-prog work';
+  const mins = Math.floor(pomoRemaining / 60);
+  const secs = pomoRemaining % 60;
+  const display = document.getElementById('pomo-display');
+  const phase = document.getElementById('pomo-phase');
+  const ring = document.getElementById('pomo-ring-fill');
+
+  if (display) display.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+  if (phase) phase.textContent = pomoPhase === 'work' ? '🍅 Học tập' : '☕ Nghỉ ngơi';
+
+  const circumference = 553; // 2 * pi * 88
+  const progress = (pomoDuration - pomoRemaining) / pomoDuration;
+  if (ring) {
+    ring.style.strokeDashoffset = circumference * (1 - progress);
+    ring.style.stroke = pomoPhase === 'work' ? 'var(--blue-accent)' : 'var(--green-accent)';
   }
-  document.getElementById('pomoSessionNum').textContent = pomodoroSessionCount + 1;
-  document.getElementById('pomoTotal').textContent = pomodoroTotalDone;
 }
 
-// ── TOAST ──
-function showToast(msg) {
+function updatePomoSessionDisplay() {
+  const el = document.getElementById('pomo-session-count');
+  if (el) el.textContent = `🍅 Phiên hôm nay: ${getPomodoroSessions()}`;
+}
+
+// =============================================
+// UTILITIES
+// =============================================
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+let toastTimeout = null;
+function showToast(msg, type = 'success') {
   const t = document.getElementById('toast');
+  if (!t) return;
   t.textContent = msg;
-  t.className = 'toast show';
-  setTimeout(() => { t.className = 'toast'; }, 2800);
+  t.className = `show ${type}`;
+  if (toastTimeout) clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => { t.className = ''; }, 3000);
 }
 
-// ── AUTO SELECT TODAY ──
-function autoSelectToday() {
-  const todayStr = getTodayStr();
-  const todayDay = ALL_DAYS.find(d => d.date === todayStr);
-  if (todayDay) {
-    currentWeek = todayDay.weekNum;
-    currentDateStr = todayStr;
-  } else {
-    currentWeek = 1;
-    currentDateStr = ALL_DAYS[0]?.date || '';
-  }
+// =============================================
+// INIT
+// =============================================
+function init() {
+  const today = new Date();
+  const todayIdx = getDayIndex(today);
+  currentDayIndex = Math.max(0, todayIdx);
+  currentWeekOffset = Math.floor(currentDayIndex / 7);
+
+  rebuildVocabBank();
+  renderDayNav();
+  renderCurrentDay();
+  renderMakeupQueue();
+
+  // Update header date
+  const headerDate = document.getElementById('header-date');
+  if (headerDate) headerDate.textContent = formatViDate(today);
 }
 
-// ── RENDER ALL ──
-function renderAll() {
-  renderWeekTabs();
-  renderWeekOverview();
-  renderDayView();
-  updateDashboard();
-}
-
-// ── INIT ──
-autoSelectToday();
-renderAll();
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
